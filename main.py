@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from plugins.plots import make_snp_plots
 from classes.Data import Markermetadata
 import os
 from utils.file_processing import *
@@ -17,12 +18,21 @@ markers = defaultdict(Markermetadata)
 samples = list(gt_data.smdata.keys())
 markers = get_markers(in_lgc_file, markers, marker_info)
 
-write_grid_file("data/out_grid.csv", gt_data.smdata, markers)
-write_flapjack_file("data/out_FJ.data", gt_data.smdata, markers)
-write_hapmap_file("data/out.hmp.txt", gt_data.smdata, markers)
+outdir = "output/"
+if not os.path.exists(outdir):
+    os.makedirs(outdir)
+print(f"Created output directory {outdir}")
+
+
+# write_grid_file("output/out_grid.csv", gt_data.smdata, markers)
+# write_flapjack_file("output/out_FJ.data", gt_data.smdata, markers)
+# write_hapmap_file("output/out.hmp.txt", gt_data.smdata, markers)
+make_snp_plots(gt_data.msdata, markers, outdir, gt_data.name)
 print(gt_data.name, len(gt_data.smdata.keys()), len(gt_data.msdata.keys()))
-get_marker_summary(gt_data.msdata)
-get_sample_summary(gt_data.smdata)
+marker_summary = get_marker_summary(gt_data.msdata)
+marker_summary.to_csv("output/marker_summary.txt", sep = "\t", index=False)
+sample_summary = get_sample_summary(gt_data.smdata)
+sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
 
 
 

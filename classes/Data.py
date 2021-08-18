@@ -9,7 +9,6 @@ class SM():
     def put_data(self, marker_name, gt_call):
         self.data[marker_name] = gt_call
 
-
 class MS():
     def __init__(self, name):
         self.marker_name = name
@@ -18,6 +17,31 @@ class MS():
     def put_data(self, sample_name, gt_call):
         self.data[sample_name] = gt_call
 
+class Call():
+    def __init__(self, call):
+        self.call = call
+        self.x_value = ""
+        self.y_value = ""
+    
+    def get_xvalue(self):
+        return self.x_value
+    
+    def get_yvalue(self):
+        return self.y_value
+    
+    def put_xvalue(self, x_value):
+        self.x_value = x_value
+        
+    def put_yvalue(self, y_value):
+        self.y_value = y_value
+        
+    def __str__(self):
+        return self.call
+    
+    def __repr__(self):
+        return self.call
+    
+    
 class Markermetadata():
     def __init__(self, marker_name):
         self.name = marker_name

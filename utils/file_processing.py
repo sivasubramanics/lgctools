@@ -88,7 +88,7 @@ def write_hapmap_file(outfile, sm_data, markers, *args):
     hapmap.chrom = pd.to_numeric(hapmap.chrom, errors='coerce')
     hapmap.pos = pd.to_numeric(hapmap.pos, errors='coerce')
     hapmap = hapmap.sort_values(by=['chrom', 'pos'])
-    hapmap.to_csv(outfile, sep = "\t")
+    hapmap.to_csv(outfile, sep = "\t", index=False)
     outfile_handle.close()
 
 

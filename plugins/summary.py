@@ -31,7 +31,7 @@ def get_marker_summary(msdata):
         counts = initialize_list(12)
         counts[0] = marker
         counts[1] = len(msdata[marker].data.keys())
-        gt_calls = list(msdata[marker].data.values())
+        gt_calls = list(map(str, msdata[marker].data.values()))
         gt_call_counts = get_counts(gt_calls)
         for call in MISSING_ALLELES:
             if call in gt_call_counts:
@@ -47,7 +47,7 @@ def get_marker_summary(msdata):
         counts[10] = major_allele[4]
         counts[11] = round(major_allele[4]/(counts[1]-counts[2]), 2)
         summary.loc[len(summary.index)] = counts
-    print(summary)
+    return summary
         
 
 def get_sample_summary(smdata):
@@ -79,7 +79,7 @@ def get_sample_summary(smdata):
         counts = initialize_list(12)
         counts[0] = sample
         counts[1] = len(smdata[sample].data.keys())
-        gt_calls = list(smdata[sample].data.values())
+        gt_calls = list(map(str,smdata[sample].data.values()))
         gt_call_counts = get_counts(gt_calls)
         for call in MISSING_ALLELES:
             if call in gt_call_counts:
@@ -95,5 +95,5 @@ def get_sample_summary(smdata):
         counts[10] = major_allele[4]
         counts[11] = round(major_allele[4]/(counts[1]-counts[2]), 2)
         summary.loc[len(summary.index)] = counts
-    print(summary)
+    return summary
     

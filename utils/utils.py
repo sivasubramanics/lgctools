@@ -51,7 +51,11 @@ def num(s):
         return int(s)
     except ValueError:
         return float(s)
-    
+
+def average(lst):
+    return sum(lst) / len(lst)
+
+
 def sort_dict(in_dict, reverse):
     if reverse:
         return dict(sorted(in_dict.items(), key=lambda item: item[1], reverse=True))

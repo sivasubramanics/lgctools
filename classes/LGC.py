@@ -37,8 +37,11 @@ class LGC():
                         msdata[marker] = SM(marker)
                     if not sample in smdata:
                         smdata[sample] = MS(marker)
-                    smdata[sample].put_data(marker, gt_call)
-                    msdata[marker].put_data(sample, gt_call)
+                    call = Call(gt_call)
+                    call.put_xvalue(entries[4])
+                    call.put_yvalue(entries[5])
+                    smdata[sample].put_data(marker, call)
+                    msdata[marker].put_data(sample, call)
         self.smdata = smdata
         self.msdata = msdata        
                     
