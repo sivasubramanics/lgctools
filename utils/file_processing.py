@@ -23,7 +23,7 @@ def write_grid_file(outfile, smdata, markers, *args):
             outfile_handle.write(sample)
         for marker in markers:
             if marker in smdata[sample].data:
-                outfile_handle.write(CSV + smdata[sample].data[marker])
+                outfile_handle.write(CSV + smdata[sample].data[marker].__str__())
             else:
                 outfile_handle.write(CSV + 'N:N')
         outfile_handle.write(NEWLINE)
@@ -47,7 +47,7 @@ def write_flapjack_file(outfile, smdata, markers, *args):
             outfile_handle.write(sample)
         for marker in markers:
             if marker in smdata[sample].data:
-                outfile_handle.write(TAB + to_flapjack(smdata[sample].data[marker]))
+                outfile_handle.write(TAB + to_flapjack(smdata[sample].data[marker].__str__()))
             else:
                 outfile_handle.write(TAB + 'N/N')
         outfile_handle.write(NEWLINE)
@@ -77,7 +77,7 @@ def write_hapmap_file(outfile, sm_data, markers, *args):
             head_line.append(sample)
         for marker in markers:
             if marker in sm_data[sample].data:
-                hmp_data[marker].append(to_flapjack(sm_data[sample].data[marker]))
+                hmp_data[marker].append(to_flapjack(sm_data[sample].data[marker].__str__()))
             else:
                 hmp_data[marker].append('N/N')
     # outfile_handle.write(TAB.join(head_line) + NEWLINE)

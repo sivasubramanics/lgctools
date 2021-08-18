@@ -36,10 +36,10 @@ class Call():
         self.y_value = y_value
         
     def __str__(self):
-        return self.call
+        return str(self.call)
     
     def __repr__(self):
-        return self.call
+        return str(self.call)
     
     
 class Markermetadata():

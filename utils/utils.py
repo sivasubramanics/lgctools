@@ -1,6 +1,23 @@
 from collections import defaultdict
 from utils.definitions import *
 
+def is_homo(call):
+	calls = call.split(':')
+	if call in MISSING_CALLS:
+		return False
+	elif calls[0] == calls[1]:
+		return True
+	else:
+		return False
+
+def is_polymorphic(call_a, call_b):
+	if is_homo(call_a) and is_homo(call_b):
+		if call_a != call_b:
+			return True
+	else:
+		return False
+
+
 def unique(in_list):
     out_set = set(in_list)
     return list(out_set)
