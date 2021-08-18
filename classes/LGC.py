@@ -3,7 +3,6 @@ from collections import defaultdict
 from classes.Data import *
 
 class LGC():
-    """docstring for ClassName."""
     def __init__(self, in_lgc_file):
         # self.name = name
         self.get_data(in_lgc_file)
@@ -17,8 +16,11 @@ class LGC():
             for line in fh:
                 line = line.strip()
                 entries = line.split(CSV)
-                if entries[0] == "Title":
+                if entries[0] == "Order number":
                     self.name = entries[1]
+                if line == "":
+                    flag_data = 0
+                    continue
                 if line == 'Data':
                     flag_data = 1
                     continue

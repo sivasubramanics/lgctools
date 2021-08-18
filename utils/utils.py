@@ -39,6 +39,13 @@ def allele_freq(in_dict, seperator):
     else:
         return [alleles[0], al_count[alleles[0]], alleles[1], al_count[alleles[1]], het_count]
 
+def to_flapjack(call):
+    if call in MISSING_CALLS:
+        return 'N/N'
+    else:
+        calls = call.split(":")
+        return calls[0] + '/' + calls[1]
+
 def num(s):
     try:
         return int(s)
