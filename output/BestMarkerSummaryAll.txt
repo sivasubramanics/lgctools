@@ -1,3 +1,0 @@
-marker_count	total_combinations	zero_count	min_one_count	min_two_count
-54	17578	54	17524	17439
-53	17578	54	17524	17439
