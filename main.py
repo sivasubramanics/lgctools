@@ -24,14 +24,19 @@ if not os.path.exists(outdir):
     os.makedirs(outdir)
 print(f"Created output directory {outdir}")
 
-
+print("Writing Grid file..")
 write_grid_file("output/out_grid.csv", gt_data.smdata, markers)
+print("Writing Flapjack file..")
 write_flapjack_file("output/out_FJ.data", gt_data.smdata, markers)
+print("Writing Hapmap file..")
 write_hapmap_file("output/out.hmp.txt", gt_data.smdata, markers)
+print("Writing SNP plots..")
 make_snp_plots(gt_data.msdata, markers, outdir, gt_data.name)
 print(gt_data.name, len(gt_data.smdata.keys()), len(gt_data.msdata.keys()))
+print("Writing Marker Summary..")
 marker_summary = get_marker_summary(gt_data.msdata)
 marker_summary.to_csv("output/marker_summary.txt", sep = "\t", index=False)
+print("Writing Marker Summary..")
 sample_summary = get_sample_summary(gt_data.smdata)
 sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
 
