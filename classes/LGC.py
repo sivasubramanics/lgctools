@@ -3,6 +3,9 @@ from collections import defaultdict
 from classes.Data import *
 
 class LGC():
+    """
+    Class that holds LGC data
+    """
     def __init__(self, in_lgc_file):
         # self.name = name
         self.get_data(in_lgc_file)

@@ -2,6 +2,9 @@ from collections import defaultdict
 from utils.definitions import *
 
 class SM():
+    """
+    Class that holds genotype data in sample fast format [sample][marker] = genotype call
+    """
     def __init__(self, name):
         self.sample_name = name
         self.data = defaultdict()
@@ -10,6 +13,9 @@ class SM():
         self.data[marker_name] = gt_call
 
 class MS():
+    """
+    Class that holds genotype data in marker fast format [marker][sample] = genotype call
+    """
     def __init__(self, name):
         self.marker_name = name
         self.data = defaultdict()
@@ -18,6 +24,9 @@ class MS():
         self.data[sample_name] = gt_call
 
 class Call():
+    """
+    Class that holds genotype allele call and its x and y coordinates
+    """
     def __init__(self, call):
         self.call = call
         self.x_value = ""
@@ -43,6 +52,9 @@ class Call():
     
     
 class Markermetadata():
+    """
+    Class that marker metadata
+    """
     def __init__(self, marker_name):
         self.name = marker_name
         self.allele_x = ""

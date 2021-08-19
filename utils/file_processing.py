@@ -7,6 +7,9 @@ import os
 import pandas as pd
 
 def write_grid_file(outfile, smdata, markers, *args):
+    """
+    Writes genotype data in grid csv file format
+    """
     if args:
         sample_dict = args[0]
     else:
@@ -30,6 +33,9 @@ def write_grid_file(outfile, smdata, markers, *args):
     outfile_handle.close()
     
 def write_flapjack_file(outfile, smdata, markers, *args):
+    """
+    Writes genotype data in flapjack file format
+    """
     if args:
         sample_dict = args[0]
     else:
@@ -55,6 +61,9 @@ def write_flapjack_file(outfile, smdata, markers, *args):
     
     
 def write_hapmap_file(outfile, sm_data, markers, *args):
+    """
+    Writes genotype data in hapmap file format
+    """
     hmp_data = defaultdict()
     if args:
         sample_dict = args[0]
@@ -93,6 +102,9 @@ def write_hapmap_file(outfile, sm_data, markers, *args):
 
 
 def get_markers(in_lgc_file, markers, marker_info_dict):
+    """
+    Returns list<Markermetadata> from lgc file
+    """
     noData = 0
     dataFlag = 0
     noMarkers = 0
@@ -128,11 +140,13 @@ def get_markers(in_lgc_file, markers, marker_info_dict):
     return markers
 
 def get_marker_info():
+    """
+    Returns dictionary of marker info holding physical positions.
+    """
     lineNo = 0
     marker_info_dict = defaultdict()
     tmp_path = os.path.abspath(sys.argv[0])
     cur_dir, file_name = os.path.split(tmp_path)
-    # print(cur_dir)
     with open(cur_dir + '/data/' + 'KASP_MarkerInfo.txt') as f:
         for line in f:
             line = line.strip()

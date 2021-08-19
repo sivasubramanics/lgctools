@@ -2,6 +2,10 @@ from collections import defaultdict, OrderedDict
 from utils.utils import *
 
 def check_performance(smdata):
+    """
+    Returns number of combinations and marker performance as list
+    [total combinations, combinations with zero markers, combinations with one marker, combinations with two markers]
+    """
     sample_list = list(smdata.keys())
     no_polymorphic = []
     for a in range(0, len(sample_list)):
@@ -18,13 +22,17 @@ def check_performance(smdata):
     return [total, counts[0], total-counts[0], total-counts[0]-counts[1]]
 
 def check_polymorphic(list_a, list_b):
-	len_list_a = len(list_a)
-	len_list_b = len(list_b)
-	no_polymorphic = 0
-	if len_list_a == len_list_b:
-		for i in range(0, len_list_a):
-			if is_polymorphic(list_a[i], list_b[i]):
-				no_polymorphic += 1
-			if no_polymorphic == 2:
-				return no_polymorphic
-	return no_polymorphic
+    """
+    Returns number of polymorphic markers between 2 lists containing genotype calls
+    More then 2 it doesn't iterate to save processing time
+    """
+    len_list_a = len(list_a)
+    len_list_b = len(list_b)
+    no_polymorphic = 0
+    if len_list_a == len_list_b:
+        for i in range(0, len_list_a):
+            if is_polymorphic(list_a[i], list_b[i]):
+                no_polymorphic += 1
+            if no_polymorphic == 2:
+                return no_polymorphic
+    return no_polymorphic

@@ -4,6 +4,9 @@ from utils.utils import *
 import plotly.graph_objects as go
 
 def make_snp_plots(msdata, markers, outdir, data_name):
+    """
+    Writes SNP quality plots for the markers
+    """
     markers_list = list(markers.keys())
     for marker in markers_list:
         if marker not in msdata:

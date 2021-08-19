@@ -3,6 +3,9 @@ from utils.utils import *
 import pandas as pd
 
 def get_marker_summary(msdata):
+    """
+    Returns marker summary dataframe from dictionary<markerfast>
+    """
     summary = pd.DataFrame(columns = ['marker_name', 
                                         'total_samples',
                                         'missing_count', 
@@ -51,6 +54,9 @@ def get_marker_summary(msdata):
         
 
 def get_sample_summary(smdata):
+    """
+    Returns sample/taxa summary dataframe from dictionary<samplefast>
+    """
     summary = pd.DataFrame(columns = ['sample_name', 
                                         'total_marker',
                                         'missing_count', 

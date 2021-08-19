@@ -1,3 +1,7 @@
+"""
+Few default variables for the lgctools
+"""
+
 MISSING_CALLS = ('N:N', '?:?', "?", "Uncallable",
                  "Unused", "missing", "Empty", "NTC")
 BLANK_SAMPLES = ('NTC', 'Empty', "")
