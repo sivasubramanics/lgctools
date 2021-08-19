@@ -16,4 +16,4 @@ COLORS = ['#ff3333', '#4d4dff', '#00cc66', '#cc66ff', '#336699']
 HMPHEAD = ("rs#", "alleles", "chrom", "pos", "strand", "assembly#", "center", "protLSID", "assayLSID", "panelLSID",
            "QCcode")
 HMPNA = ['NA', 'NA', 'NA', 'NA', 'NA', 'NA']
-
+MULTIPROCESSING = True

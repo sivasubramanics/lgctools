@@ -1,7 +1,7 @@
 from collections import defaultdict, OrderedDict
 from utils.utils import *
 
-def check_performance(smdata):
+def check_performance(smdata, *args):
     """
     Returns number of combinations and marker performance as list
     [total combinations, combinations with zero markers, combinations with one marker, combinations with two markers]
@@ -19,7 +19,13 @@ def check_performance(smdata):
         counts[i] = counts.get(i, 0) + 1
     counts = OrderedDict(sorted(counts.items()))
     total = len(no_polymorphic)
-    return [total, counts[0], total-counts[0], total-counts[0]-counts[1]]
+    if not args:
+        return [total, counts[0], total-counts[0], total-counts[0]-counts[1]]
+    else:
+        marker_scores_dict = args[0]
+        marker_name = args[1]
+        if not marker_name in marker_scores_dict:
+            marker_scores_dict[marker_name] = [total, counts[0], total-counts[0], total-counts[0]-counts[1]]
 
 def check_polymorphic(list_a, list_b):
     """
