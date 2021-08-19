@@ -4,7 +4,7 @@ from classes.Data import *
 
 class LGC():
     """
-    Class that holds LGC data
+    Class that holds genotype data from LGC file
     """
     def __init__(self, in_lgc_file):
         # self.name = name
@@ -46,6 +46,6 @@ class LGC():
                     smdata[sample].put_data(marker, call)
                     msdata[marker].put_data(sample, call)
         self.smdata = smdata
-        self.msdata = msdata        
+        self.msdata = msdata
                     
                     

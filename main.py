@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from plugins.bestmarkers import get_best_markers
 from plugins.performance import check_performance
 from plugins.plots import make_snp_plots
 from classes.Data import Markermetadata
@@ -11,8 +12,10 @@ from classes.LGC import LGC
 from utils.definitions import *
 from collections import defaultdict
 
-in_lgc_file = "data/Genotyping-092.008-01.csv"
+in_lgc_file = "data/Genotyping-008.077-08.csv"
 gt_data = LGC(in_lgc_file)
+msdata = gt_data.msdata
+smdata = gt_data.smdata
 
 marker_info = get_marker_info()
 markers = defaultdict(Markermetadata)
@@ -24,27 +27,40 @@ if not os.path.exists(outdir):
     os.makedirs(outdir)
 print(f"Created output directory {outdir}")
 
-print("Writing Grid file..")
-write_grid_file("output/out_grid.csv", gt_data.smdata, markers)
-print("Writing Flapjack file..")
-write_flapjack_file("output/out_FJ.data", gt_data.smdata, markers)
-print("Writing Hapmap file..")
-write_hapmap_file("output/out.hmp.txt", gt_data.smdata, markers)
-print("Writing SNP plots..")
-make_snp_plots(gt_data.msdata, markers, outdir, gt_data.name)
-print(gt_data.name, len(gt_data.smdata.keys()), len(gt_data.msdata.keys()))
+# print("Writing Grid file..")
+# write_grid_file("output/out_grid.csv", smdata, markers)
+
+# print("Writing Flapjack file..")
+# write_flapjack_file("output/out_FJ.data", smdata, markers)
+
+# print("Writing Hapmap file..")
+# write_hapmap_file("output/out.hmp.txt", smdata, markers)
+
+# print("Writing SNP plots..")
+# make_snp_plots(gt_data.msdata, markers, outdir, gt_data.name)
+
+# print(gt_data.name, len(smdata.keys()), len(msdata.keys()))
+
 print("Writing Marker Summary..")
-marker_summary = get_marker_summary(gt_data.msdata)
+marker_summary = get_marker_summary(msdata)
 marker_summary.to_csv("output/marker_summary.txt", sep = "\t", index=False)
-print("Writing Marker Summary..")
-sample_summary = get_sample_summary(gt_data.smdata)
+
+print("Writing Sample Summary..")
+sample_summary = get_sample_summary(smdata)
 sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
 
-performance = check_performance(gt_data.smdata)
-print(f"Total combinations: {performance[0]}")
-print(f"Combinations with ZERO polymorphic markers: {performance[1]}")
-print(f"Combinations with >= 1 polymorphic markers: {performance[2]}")
-print(f"Combinations with >= 2 polymorphic markers: {performance[3]}")
+# print("Checking performance..")
+# performance = check_performance(gt_data.smdata)
+# print(f"Total combinations: {performance[0]}")
+# print(f"Combinations with ZERO polymorphic markers: {performance[1]}")
+# print(f"Combinations with >= 1 polymorphic markers: {performance[2]}")
+# print(f"Combinations with >= 2 polymorphic markers: {performance[3]}")
+
+smdata, msdata = fill_gaps_gtdata(smdata, msdata)
+all_summary,ind_summary = get_best_markers(smdata, msdata, marker_summary)
+ind_summary = ind_summary.sort_values(by=['marker_count', 'min_two_count'])
+all_summary.to_csv("output/BestMarkerSummaryAll.txt", sep = "\t", index=False)
+ind_summary.to_csv("output/BestMarkerSummaryInd.txt", sep = "\t", index=False)
 
 
 

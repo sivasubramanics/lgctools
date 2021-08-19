@@ -1,5 +1,6 @@
 from collections import defaultdict
 from utils.definitions import *
+from classes.Data import *
 
 def is_homo(call):
     """
@@ -50,6 +51,10 @@ def initialize_list(count_element):
         out_list.append(0)
     return out_list
 
+def get_pic(freq_a, freq_b):
+    pic = 1 - ((freq_a * freq_a) + (freq_b * freq_b)) - (2 * (freq_a * freq_a) * (freq_b * freq_b))
+    return round(pic, 2)
+
 def allele_freq(in_dict, seperator):
     """
     Returns list of alleles and its count from a dictionary of allele counts.
@@ -61,15 +66,17 @@ def allele_freq(in_dict, seperator):
         if not call in MISSING_CALLS:
             alleles = call.split(seperator)
             if not alleles[0] in al_count:
-                al_count[alleles[0]] = 1
+                al_count[alleles[0]] = 0
             if not alleles[1] in al_count:
-                al_count[alleles[1]] = 1
+                al_count[alleles[1]] = 0
             al_count[alleles[0]] += 1
             al_count[alleles[1]] += 1
             if alleles[0] != alleles[1]:
                 het_count += 1
     al_count = sort_dict(al_count, True)
     alleles = list(al_count.keys())
+    if not alleles:
+        return ['na', 0, 'na', 0, 0]
     if len(alleles) == 1:
         return [alleles[0], al_count[alleles[0]], 'na', 0, het_count]
     else:
@@ -110,4 +117,55 @@ def sort_dict(in_dict, reverse):
     else:
         return dict(sorted(in_dict.items(), key=lambda item: item[1], reverse=False))
     
+def subset_gtdata(in_data, markers, samples, data_type):
+    if data_type == 'samplefast':
+        out_data = defaultdict()
+        for sample in in_data:
+            if not sample in samples:
+                continue
+            out_data[sample] = SM(sample)
+            for marker in in_data[sample].data:
+                if not marker in markers:
+                    continue
+                out_data[sample].put_data(marker, in_data[sample].data[marker])
+    elif data_type == 'markerfast':
+        out_data = defaultdict()
+        for marker in in_data:
+            if not marker in markers:
+                continue
+            out_data[marker] = MS(marker)
+            for sample in in_data[marker].data:
+                if not sample in samples:
+                    continue
+                out_data[marker].put_data(sample, in_data[marker].data[sample])
+    else:
+        print(f"Error: {data_type} is unknown. Should be 'samplefast' or 'markerfast'..")
+        exit(1)
+    return out_data
+        
+def fill_gaps_gtdata(smdata, msdata):
+    markers = []
+    samples = []
+    missing_call = Call('N:N')
+    markers = list(msdata.keys())
+    samples = list(smdata.keys())
     
+    if not markers:
+        print(f"ERROR: Input markerfast dictionaty is empty.")
+        exit(1)
+    
+    if not samples:
+        print(f"ERROR: Input samplefast dictionaty is empty.")
+        exit(1)
+    
+    for marker in msdata:
+        for sample in samples:
+            if not sample in msdata[marker].data:
+                msdata[marker].data[sample] = missing_call
+    
+    for sample in smdata:
+        for marker in markers:
+            if not marker in smdata[sample].data:
+                smdata[sample].data[marker] = missing_call
+    
+    return smdata, msdata

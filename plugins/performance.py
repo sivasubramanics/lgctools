@@ -36,3 +36,4 @@ def check_polymorphic(list_a, list_b):
             if no_polymorphic == 2:
                 return no_polymorphic
     return no_polymorphic
+
