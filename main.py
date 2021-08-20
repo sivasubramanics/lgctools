@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from classes.Hapmap import Hapmap
 from plugins.bestmarkers import get_best_markers
 from plugins.performance import check_performance
 from plugins.plots import make_snp_plots
@@ -74,6 +75,14 @@ tmp_msdata = subset_gtdata(msdata, extract_markers, samples, 'markerfast')
 
 print("Writing Hapmap file..")
 write_hapmap_file("output/15_out.hmp.txt", tmp_smdata, extract_markers)
+
+gt_data = Hapmap("output/15_out.hmp.txt")
+print("Checking performance..")
+performance = check_performance(gt_data.smdata)
+print(f"Total combinations: {performance[0]}")
+print(f"Combinations with ZERO polymorphic markers: {performance[1]}")
+print(f"Combinations with >= 1 polymorphic markers: {performance[2]}")
+print(f"Combinations with >= 2 polymorphic markers: {performance[3]}")
 
 
 

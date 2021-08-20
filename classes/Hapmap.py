@@ -2,7 +2,7 @@
 from collections import defaultdict
 from utils.definitions import *
 from utils.utils import *
-from classes import Call
+from classes.Data import *
 
 class Hapmap():
     """
@@ -19,7 +19,7 @@ class Hapmap():
             flag_data = 0
             for line in fh:
                 line = line.strip()
-                entries = line.split(CSV)
+                entries = line.split(TAB)
                 if entries[0] == "rs#":
                     flag_data = 1
                     samples = entries[11:]
@@ -29,15 +29,17 @@ class Hapmap():
                 if flag_data == 0:
                     continue
                 marker = entries[0]
-                if sample in BLANK_SAMPLES:
-                    continue
                 for i in range(11, len(entries)):
-                    sample = samples[i]
+                    sample = samples[i-11]
                     if sample in BLANK_SAMPLES:
                         continue
+                    if not marker in msdata:
+                        msdata[marker] = SM(marker)
+                    if not sample in smdata:
+                        smdata[sample] = MS(marker)
                     if len(entries[i]) == 1:
                         entries[i] = IUPAC[entries[i]]
-                    if len(entries[i] == 2):
+                    if len(entries[i]) == 2:
                         entries[i] = to_grid(entries[i])
                     call = Call(entries[i])
                     smdata[sample].put_data(marker, call)

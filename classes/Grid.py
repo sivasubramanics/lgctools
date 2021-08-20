@@ -1,7 +1,7 @@
 
 from collections import defaultdict
 from utils.definitions import BLANK_SAMPLES, CSV
-from classes import Call
+from classes.Data import *
 
 class Grid():
     """
@@ -32,6 +32,10 @@ class Grid():
                     continue
                 for i in range(1, len(entries)):
                     marker = markers[i]
+                    if not marker in msdata:
+                        msdata[marker] = SM(marker)
+                    if not sample in smdata:
+                        smdata[sample] = MS(marker)
                     call = Call(entries[i])
                     smdata[sample].put_data(marker, call)
                     msdata[marker].put_data(sample, call)
