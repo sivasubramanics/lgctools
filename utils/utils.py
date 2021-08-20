@@ -169,3 +169,14 @@ def fill_gaps_gtdata(smdata, msdata):
                 smdata[sample].data[marker] = missing_call
     
     return smdata, msdata
+
+def get_dup_keys(in_dict, q_value):
+    return [k for k,v in in_dict.items() if v == q_value]
+
+def extract_dict(in_dict, keys_list):
+    out_dict = defaultdict()
+    for key in keys_list:
+        if key in in_dict:
+            out_dict[key] = in_dict[key]
+    
+    return out_dict

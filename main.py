@@ -58,10 +58,9 @@ sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
 
 smdata, msdata = fill_gaps_gtdata(smdata, msdata)
 all_summary,ind_summary = get_best_markers(smdata, msdata, marker_summary)
-ind_summary = ind_summary.sort_values(by=['marker_count', 'min_two_count'])
 all_summary.to_csv("output/BestMarkerSummaryAll.txt", sep = "\t", index=False)
 ind_summary.to_csv("output/BestMarkerSummaryInd.txt", sep = "\t", index=False)
-
+counts = ind_summary.at('marker_count')
 
 
 

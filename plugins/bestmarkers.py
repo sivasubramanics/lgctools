@@ -3,11 +3,28 @@ import pandas as pd
 from multiprocessing import Process
 import multiprocessing
 from utils.definitions import *
+from utils.utils import *
+
+def get_bad_marker(marker_scores):
+    tmp_dict_one = defaultdict()
+    tmp_dict_two = defaultdict()
+    for key in marker_scores:
+        tmp_dict_one[key] = marker_scores[key][0]
+        tmp_dict_two[key] = marker_scores[key][1]
+    tmp_dict_one = sort_dict(tmp_dict_one, True)
+    badmarker = list(tmp_dict_one.keys())[0]
+    identical_markers = get_dup_keys(tmp_dict_one, tmp_dict_one[badmarker])
+    if len(identical_markers) > 1:
+        tmp_dict_three = extract_dict(tmp_dict_two, identical_markers)
+        tmp_dict_three = sort_dict(tmp_dict_three, False)
+        badmarker = list(tmp_dict_three.keys())[0]
+    return badmarker
 
 def get_best_markers(smdata, msdata, marker_summary):
     """
     Returns dataframe with best markers summary
     """
+    marker_summary = marker_summary.set_index('marker_name')
     markers = list(msdata.keys())
     samples = list(smdata.keys())
     overall_summary = pd.DataFrame(columns = ['marker_count', 
@@ -15,21 +32,21 @@ def get_best_markers(smdata, msdata, marker_summary):
                                                 'zero_count', 
                                                 'min_one_count',
                                                 'min_two_count'])
-    markers_summary = pd.DataFrame(columns = ['marker_count',
+    best_markers_summary = pd.DataFrame(columns = ['marker_count',
                                                 'marker', 
                                                 'total_combinations',
                                                 'zero_count', 
                                                 'min_one_count',
                                                 'min_two_count'])
     scores = []
-    while len(markers) >= 53:
+    while len(markers) >= 5:
         scores = check_performance(smdata)
         scores.insert(0, len(markers))
         overall_summary.loc[len(overall_summary.index)] = scores
         if MULTIPROCESSING:
             manager = multiprocessing.Manager()
             marker_scores_dict = manager.dict()
-            marker_scores = defaultdict()
+            df_ms = pd.DataFrame(columns = ['marker_name', 'score', 'qual'])
             processess = []
             for marker in markers:
                 tmp_markers = markers.copy()
@@ -43,33 +60,33 @@ def get_best_markers(smdata, msdata, marker_summary):
                 process.join()
             for marker in marker_scores_dict:
                 scores = marker_scores_dict[marker]
-                # missing_percentage = marker_summary.loc[markers_summary.marker_name == marker,'missing_percentage'].values[0]
-                if not marker in marker_scores:
-                    marker_scores[marker] = scores[3]/scores[0]*100
+                missing_percentage = marker_summary.at[marker, 'PIC']
+                df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, missing_percentage]
                 scores.insert(0, marker)
                 scores.insert(0, len(markers))
                 # print(len(scores), scores)
-                markers_summary.loc[len(markers_summary.index)] = scores
+                best_markers_summary.loc[len(best_markers_summary.index)] = scores
         else:
-            marker_scores = defaultdict()
             for marker in markers:
                 tmp_markers = markers.copy()
                 tmp_markers.remove(marker)
                 tmp_smdata = subset_gtdata(smdata, tmp_markers, samples, 'samplefast')
                 tmp_msdata = subset_gtdata(msdata, tmp_markers, samples, 'markerfast')
                 scores = check_performance(tmp_smdata)
-                if not marker in marker_scores:
-                    marker_scores[marker] = scores[3]/scores[0]*100
+                missing_percentage = marker_summary.at[marker, 'PIC']
+                df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, missing_percentage]
                 scores.insert(0, marker)
                 scores.insert(0, len(markers))
                 # print(len(scores), scores)
-                markers_summary.loc[len(markers_summary.index)] = scores
+                best_markers_summary.loc[len(best_markers_summary.index)] = scores
 
-        marker_scores = sort_dict(marker_scores, True)
-        badmarker = list(marker_scores.keys())[0]
+        df_ms = df_ms.sort_values(by=['score', 'qual'], ascending=[True, False])
+        badmarker = df_ms['marker_name'].iloc[-1]
+        # print(len(markers), 'dict', badmarker)
         markers.remove(badmarker)
         smdata = subset_gtdata(smdata, markers, samples, 'samplefast')
         msdata = subset_gtdata(msdata, markers, samples, 'markerfast')
-    return overall_summary, markers_summary
+    best_markers_summary = best_markers_summary.sort_values(by=['marker_count', 'min_two_count'], ascending=[False, True])
+    return overall_summary, best_markers_summary 
 
 
