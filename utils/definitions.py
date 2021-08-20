@@ -17,3 +17,14 @@ HMPHEAD = ("rs#", "alleles", "chrom", "pos", "strand", "assembly#", "center", "p
            "QCcode")
 HMPNA = ['NA', 'NA', 'NA', 'NA', 'NA', 'NA']
 MULTIPROCESSING = True
+IUPAC = {'A':'A:A', 
+         'T':'T:T', 
+         'C':'C:C', 
+         'G':'G:G', 
+         'N':'N:N', 
+         'R':'A:G', 
+         'S':'C:G', 
+         'M':'A:C', 
+         'Y':'C:T', 
+         'W':'A:T', 
+         'K':'G:T'}

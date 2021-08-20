@@ -24,7 +24,6 @@ def is_polymorphic(call_a, call_b):
     else:
         return False
 
-
 def unique(in_list):
     """
     Returns list of unique elements
@@ -92,6 +91,27 @@ def to_flapjack(call):
         calls = call.split(":")
         return calls[0] + '/' + calls[1]
 
+def to_hmp(call):
+    """
+    Converts LGC format genotype call to Hapmap format by replacing ':' to ''
+    """
+    if call in MISSING_CALLS:
+        return 'NN'
+    else:
+        calls = call.split(":")
+        return calls[0] + calls[1]
+
+def to_grid(call):
+    """
+    Converts Hapmap format genotype call to grid format by replacing '' to ':'
+    """
+    if call in MISSING_CALLS:
+        return 'N:N'
+    else:
+        calls = list(call)
+        return calls[0] + ':' + calls[1]
+
+
 def num(s):
     """
     Returns numeric value of the input
@@ -106,7 +126,6 @@ def average(lst):
     Returns average (mean) of the list of numbers
     """
     return sum(lst) / len(lst)
-
 
 def sort_dict(in_dict, reverse):
     """

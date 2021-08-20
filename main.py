@@ -56,13 +56,24 @@ sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
 # print(f"Combinations with >= 1 polymorphic markers: {performance[2]}")
 # print(f"Combinations with >= 2 polymorphic markers: {performance[3]}")
 
-smdata, msdata = fill_gaps_gtdata(smdata, msdata)
-all_summary,ind_summary = get_best_markers(smdata, msdata, marker_summary)
-all_summary.to_csv("output/BestMarkerSummaryAll.txt", sep = "\t", index=False)
-ind_summary.to_csv("output/BestMarkerSummaryInd.txt", sep = "\t", index=False)
-counts = ind_summary.at('marker_count')
+# smdata, msdata = fill_gaps_gtdata(smdata, msdata)
+# all_summary,ind_summary = get_best_markers(smdata, msdata, marker_summary)
+# all_summary.to_csv("output/BestMarkerSummaryAll.txt", sep = "\t", index=False)
+# ind_summary.to_csv("output/BestMarkerSummaryInd.txt", sep = "\t", index=False)
+
+filename = "output/BestMarkerSummaryInd.txt"
+ind_summary = pd.read_csv(filename, sep="\t", index_col='marker_count')
+count = 15
+print(list(ind_summary.loc[count]['marker']))
+extract_markers = list(ind_summary.loc[count]['marker'])
+extract_markers = extract_dict(markers, extract_markers)
+
+tmp_smdata = subset_gtdata(smdata, extract_markers, samples, 'samplefast')
+tmp_msdata = subset_gtdata(msdata, extract_markers, samples, 'markerfast')
 
 
+print("Writing Hapmap file..")
+write_hapmap_file("output/15_out.hmp.txt", tmp_smdata, extract_markers)
 
 
 
