@@ -2,6 +2,7 @@ from collections import defaultdict
 from utils.definitions import *
 from classes.Data import *
 
+
 def is_homo(call):
     """
     Check if the genotype call is homozygous call eg: G:G
@@ -199,3 +200,22 @@ def extract_dict(in_dict, keys_list):
             out_dict[key] = in_dict[key]
     
     return out_dict
+
+def filter_markers(markers, flt_marker_summary):
+    flt_markers = list(flt_marker_summary['marker_name'])
+    new_markers = defaultdict(Markermetadata)
+    for marker in markers:
+        if marker in flt_markers:
+            new_markers[marker] = markers[marker]
+    markers = new_markers.copy()
+    return markers
+
+
+def filter_samples(samples, flt_sample_summary):
+    flt_samples = list(flt_sample_summary['sample_name'])
+    new_samples = []
+    for sample in samples:
+        if sample in flt_samples:
+            new_samples.append(sample)
+    samples = new_samples.copy()
+    return samples

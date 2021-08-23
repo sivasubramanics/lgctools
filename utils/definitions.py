@@ -28,3 +28,6 @@ IUPAC = {'A':'A:A',
          'Y':'C:T', 
          'W':'A:T', 
          'K':'G:T'}
+SAMPLE_MISSING_CUTOFF = 80
+MARKER_MISSING_CUTOFF = 100
+MARKER_MAF_CUTOFF = 0

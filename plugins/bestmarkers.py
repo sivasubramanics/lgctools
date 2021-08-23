@@ -64,7 +64,6 @@ def get_best_markers(smdata, msdata, marker_summary):
                 df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, missing_percentage]
                 scores.insert(0, marker)
                 scores.insert(0, len(markers))
-                # print(len(scores), scores)
                 best_markers_summary.loc[len(best_markers_summary.index)] = scores
         else:
             for marker in markers:
@@ -77,7 +76,6 @@ def get_best_markers(smdata, msdata, marker_summary):
                 df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, missing_percentage]
                 scores.insert(0, marker)
                 scores.insert(0, len(markers))
-                # print(len(scores), scores)
                 best_markers_summary.loc[len(best_markers_summary.index)] = scores
 
         df_ms = df_ms.sort_values(by=['score', 'qual'], ascending=[True, False])
