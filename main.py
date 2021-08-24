@@ -11,13 +11,15 @@ from utils.file_processing import *
 from plugins.summary import get_marker_summary, get_sample_summary
 import sys
 from classes.LGC import LGC
+from classes.Grid import Grid
 from utils.definitions import *
 from collections import defaultdict
 import warnings
 import numpy as np
+
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
-in_lgc_file = "data/Genotyping-008.077-08.csv"
-gt_data = LGC(in_lgc_file)
+in_lgc_file = sys.argv[1]
+gt_data = Grid(in_lgc_file)
 msdata = gt_data.msdata
 smdata = gt_data.smdata
 
@@ -27,6 +29,10 @@ marker_info = get_marker_info()
 markers = defaultdict(Markermetadata)
 samples = list(smdata.keys())
 markers = get_markers(in_lgc_file, markers, marker_info)
+
+if not markers:
+    marker = make_markers(msdata, markers, marker_info)
+
 
 outdir = "output/"
 if not os.path.exists(outdir):
@@ -47,16 +53,16 @@ print(f"Created output directory {outdir}")
 
 print(gt_data.name, len(smdata.keys()), len(msdata.keys()))
 
-# print("Writing Marker Summary..")
-# marker_summary = get_marker_summary(msdata)
-# marker_summary.to_csv("output/marker_summary.txt", sep = "\t", index=False)
+print("Writing Marker Summary..")
+marker_summary = get_marker_summary(msdata)
+marker_summary.to_csv("output/marker_summary.txt", sep = "\t", index=False)
 
-# print("Writing Sample Summary..")
-# sample_summary = get_sample_summary(smdata)
-# sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
+print("Writing Sample Summary..")
+sample_summary = get_sample_summary(smdata)
+sample_summary.to_csv("output/sample_summary.txt", sep = "\t", index=False)
 
-differences = find_differences(smdata)
-differences.to_csv("output/differences.txt", sep = "\t", index=False)
+# differences = find_differences(smdata)
+# differences.to_csv("output/differences.txt", sep = "\t", index=False)
 
 # print("Checking performance..")
 # performance = check_performance(smdata)
@@ -76,25 +82,26 @@ differences.to_csv("output/differences.txt", sep = "\t", index=False)
 # extract_markers = list(ind_summary.loc[count]['marker'])
 # extract_markers = extract_dict(markers, extract_markers)
 
-# flt_sample_summary = sample_summary.loc[sample_summary['missing_percentage'] < SAMPLE_MISSING_CUTOFF]
-# flt_sample_summary.to_csv("output/sample_summary_flt.txt", sep = "\t", index=False)
-# samples = filter_samples(samples, flt_sample_summary)
+flt_sample_summary = sample_summary.loc[sample_summary['missing_percentage'] < SAMPLE_MISSING_CUTOFF]
+flt_sample_summary.to_csv("output/sample_summary_flt.txt", sep = "\t", index=False)
+samples = filter_samples(samples, flt_sample_summary)
 
-# flt_marker_summary = marker_summary.loc[marker_summary['missing_percentage'] < MARKER_MISSING_CUTOFF]
-# flt_marker_summary.to_csv("output/marker_summary_flt.txt", sep = "\t", index=False)
-# markers = filter_markers(markers, flt_marker_summary)
+flt_marker_summary = marker_summary.loc[marker_summary['missing_percentage'] < MARKER_MISSING_CUTOFF]
+flt_marker_summary.to_csv("output/marker_summary_flt.txt", sep = "\t", index=False)
+markers = filter_markers(markers, flt_marker_summary)
 
-# smdata = subset_gtdata(smdata, markers, samples, 'samplefast')
-# msdata = subset_gtdata(msdata, markers, samples, 'markerfast')
 
-# print("Writing Grid file..")
-# write_grid_file("output/out_grid_flt.csv", smdata, markers)
+smdata = subset_gtdata(smdata, markers, samples, 'samplefast')
+msdata = subset_gtdata(msdata, markers, samples, 'markerfast')
 
-# print("Writing Flapjack file..")
-# write_flapjack_file("output/out_FJ_flt.data", smdata, markers)
+print("Writing Grid file..")
+write_grid_file("output/out_grid_flt.csv", smdata, markers)
 
-# print("Writing Hapmap file..")
-# write_hapmap_file("output/out_flt.hmp.txt", smdata, markers)
+print("Writing Flapjack file..")
+write_flapjack_file("output/out_FJ_flt.data", smdata, markers)
+
+print("Writing Hapmap file..")
+write_hapmap_file("output/out_flt.hmp.txt", smdata, markers)
 
 
 # print("Checking performance..")
@@ -105,9 +112,9 @@ differences.to_csv("output/differences.txt", sep = "\t", index=False)
 # print(f"Combinations with >= 2 polymorphic markers: {performance[3]} ({round((performance[3]/performance[0])*100,2)} %)")
 
 # # smdata, msdata = fill_gaps_gtdata(smdata, msdata)
-# all_summary,ind_summary = get_best_markers(smdata, msdata, marker_summary)
-# all_summary.to_csv("output/BestMarkerSummaryAll_flt.txt", sep = "\t", index=False)
-# ind_summary.to_csv("output/BestMarkerSummaryInd_flt.txt", sep = "\t", index=False)
+all_summary,ind_summary = get_best_markers(smdata, msdata, marker_summary)
+all_summary.to_csv("output/BestMarkerSummaryAll_flt.txt", sep = "\t", index=False)
+ind_summary.to_csv("output/BestMarkerSummaryInd_flt.txt", sep = "\t", index=False)
 
 # filename = "output/BestMarkerSummaryInd.txt"
 # ind_summary = pd.read_csv(filename, sep="\t", index_col='marker_count')

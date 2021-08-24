@@ -31,7 +31,7 @@ class Grid():
                 if sample in BLANK_SAMPLES:
                     continue
                 for i in range(1, len(entries)):
-                    marker = markers[i]
+                    marker = markers[i-1]
                     if not marker in msdata:
                         msdata[marker] = SM(marker)
                     if not sample in smdata:

@@ -1,5 +1,6 @@
 from plugins.performance import *
 import pandas as pd
+import sys
 from multiprocessing import Process
 import multiprocessing
 from utils.definitions import *
@@ -48,11 +49,16 @@ def get_best_markers(smdata, msdata, marker_summary):
             marker_scores_dict = manager.dict()
             df_ms = pd.DataFrame(columns = ['marker_name', 'score', 'qual'])
             processess = []
+            no_marker = 0
             for marker in markers:
+                no_marker += 1
                 tmp_markers = markers.copy()
                 tmp_markers.remove(marker)
+                # print(f"\r{len(markers)} - {no_marker}")
+                print(f"\r{len(markers)} - {no_marker}", end='', flush=True)
+                sys.stdout.flush()
                 tmp_smdata = subset_gtdata(smdata, tmp_markers, samples, 'samplefast')
-                tmp_msdata = subset_gtdata(msdata, tmp_markers, samples, 'markerfast')
+                # tmp_msdata = subset_gtdata(msdata, tmp_markers, samples, 'markerfast')
                 process = Process(target=check_performance, args=(tmp_smdata, marker_scores_dict, marker))
                 processess.append(process)
                 process.start()
@@ -60,8 +66,8 @@ def get_best_markers(smdata, msdata, marker_summary):
                 process.join()
             for marker in marker_scores_dict:
                 scores = marker_scores_dict[marker]
-                missing_percentage = marker_summary.at[marker, 'PIC']
-                df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, missing_percentage]
+                pic = marker_summary.at[marker, 'PIC']
+                df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, pic]
                 scores.insert(0, marker)
                 scores.insert(0, len(markers))
                 best_markers_summary.loc[len(best_markers_summary.index)] = scores
@@ -69,11 +75,13 @@ def get_best_markers(smdata, msdata, marker_summary):
             for marker in markers:
                 tmp_markers = markers.copy()
                 tmp_markers.remove(marker)
+                print(f"\r{len(markers)} - {no_marker}", end='', flush=True)
+                sys.stdout.flush()
                 tmp_smdata = subset_gtdata(smdata, tmp_markers, samples, 'samplefast')
-                tmp_msdata = subset_gtdata(msdata, tmp_markers, samples, 'markerfast')
+                # tmp_msdata = subset_gtdata(msdata, tmp_markers, samples, 'markerfast')
                 scores = check_performance(tmp_smdata)
-                missing_percentage = marker_summary.at[marker, 'PIC']
-                df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, missing_percentage]
+                pic = marker_summary.at[marker, 'PIC']
+                df_ms.loc[len(df_ms.index)] = [marker, scores[3]/scores[0]*100, pic]
                 scores.insert(0, marker)
                 scores.insert(0, len(markers))
                 best_markers_summary.loc[len(best_markers_summary.index)] = scores

@@ -100,6 +100,12 @@ def write_hapmap_file(outfile, sm_data, markers, *args):
     hapmap.to_csv(outfile, sep = "\t", index=False)
     outfile_handle.close()
 
+def make_markers(msdata, markers, marker_info_dict):
+    for marker in msdata:
+        markers[marker] = Markermetadata(marker)
+        if marker in marker_info_dict:
+            markers[marker].put_marker_info(marker_info_dict[marker])
+    return markers
 
 def get_markers(in_lgc_file, markers, marker_info_dict):
     """
