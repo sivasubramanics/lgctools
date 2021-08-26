@@ -6,18 +6,19 @@ from plugins.performance import check_performance
 from plugins.differences import *
 from plugins.plots import make_snp_plots
 from classes.Data import Markermetadata
-import os
 from utils.file_processing import *
 from plugins.summary import get_marker_summary, get_sample_summary
-import sys
 from classes.LGC import LGC
 from classes.Grid import Grid
 from utils.definitions import *
 from collections import defaultdict
+import sys
+import os
 import warnings
 import numpy as np
-
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
+
+
 in_lgc_file = sys.argv[1]
 gt_data = Grid(in_lgc_file)
 msdata = gt_data.msdata
