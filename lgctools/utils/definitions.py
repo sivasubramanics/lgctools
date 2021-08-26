@@ -32,7 +32,8 @@ SAMPLE_MISSING_CUTOFF = 80
 MARKER_MISSING_CUTOFF = 100
 MARKER_MAF_CUTOFF = 0
 TASKS = ['convert', 'reheader', 'makeplots', 'summary', 'merge', 'differences', 'performance', 'bestmarkers', ]
-FORMATS = ['lgc', 'grid', 'hapmap', 'flapjack']
+
+FORMATS = ['lgc', 'grid', 'hmp', 'fjk']
 USAGE="""
 Program: lgctools (Tools for processing LGC files)
 Version: 0.1
