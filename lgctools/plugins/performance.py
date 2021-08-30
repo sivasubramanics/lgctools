@@ -2,7 +2,7 @@ from collections import defaultdict, OrderedDict
 from utils.utils import *
 
 
-def check_performance(smdata, sample_list_a, sample_list_b, *args):
+def check_performance(smdata, sample_list_a=[], sample_list_b=[], *args):
     """
     Returns number of combinations and marker performance as list
     [total combinations, combinations with zero markers, combinations with one marker, combinations with two markers]

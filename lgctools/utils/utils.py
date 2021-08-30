@@ -188,11 +188,11 @@ def fill_gaps_gtdata(smdata, msdata):
     samples = list(smdata.keys())
 
     if not markers:
-        print(f"ERROR: Input markerfast dictionaty is empty.")
+        print(f"ERROR: Input markerfast dictionary is empty.")
         exit(1)
 
     if not samples:
-        print(f"ERROR: Input samplefast dictionaty is empty.")
+        print(f"ERROR: Input samplefast dictionary is empty.")
         exit(1)
 
     for marker in msdata:
@@ -280,6 +280,10 @@ def get_opts():
                         metavar="<FILE>", help="File with list of snps to analyze")
     parser.add_argument("--sample-list", dest="sample_list_file",
                         metavar="<FILE>", help="File with list of samples to analyze")
+    parser.add_argument("--male-parents-list", dest="sample_list_a_file",
+                        metavar="<FILE>", help="File with list of male parents to consider")
+    parser.add_argument("--female-parents-list", dest="sample_list_b_file",
+                        metavar="<FILE>", help="File with list of female parents to consider")
     parser.add_argument("--qtl-file", dest="qtl_file",
                         metavar="<FILE>", help="QTL file in GOBii format")
     parser.add_argument("--out", dest="out_prefix", default="out",

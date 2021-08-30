@@ -20,35 +20,7 @@ warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 
 def main():
-    options = Getoptions(sys.argv[1:])
-    print(options.task)
-    task = options.task
-    arguments = options.arguments
-    print(task, arguments)
-    if task == 'convert':
-        in_format = arguments['I']
-        out_format = arguments['O']
-        in_file = arguments['i']
-        out_file = arguments['o']
-        if in_format == 'lgc':
-            gt_data = LGC(in_file)
-            msdata = gt_data.msdata
-            smdata = gt_data.smdata
-            smdata, msdata = fill_gaps_gtdata(smdata, msdata)
-            marker_info = get_marker_info()
-            markers = defaultdict(Markermetadata)
-            markers = get_markers(in_file, markers, marker_info)
-            if not markers:
-                marker = make_markers(msdata, markers, marker_info)
-        if out_format == "grid":
-            write_grid_file(out_file, smdata, markers)
-        if out_format == "fjk":
-            write_flapjack_file(out_file, smdata, markers)
-        if out_format == "hmp":
-            write_hapmap_file(out_file, smdata, markers)
-
-
-if __name__ == '__main__':
+    # if __name__ == '__main__':
     # main()
 
     parser = get_opts()
@@ -128,29 +100,50 @@ if __name__ == '__main__':
             flt_marker_summary.to_csv(
                 out_prefix + "_marker_summary_flt.txt", sep="\t", index=False)
 
+    if options.sample_list_a_file and options.sample_list_b_file:
+        sample_list_a = get_list_from_file(options.sample_list_a_file)
+        sample_list_b = get_list_from_file(options.sample_list_b_file)
+    elif options.sample_list_a_file and not options.sample_list_b_file:
+        print(f"ERROR: Female parents list file missing.. Quiting...")
+        exit(1)
+    elif not options.sample_list_a_file and options.sample_list_b_file:
+        print(f"ERROR: Male parents list file missing.. Quiting...")
+        exit(1)
+    else:
+        sample_list_a = []
+        sample_list_b = []
+
     if options.task_bestmarkers:
         all_summary, ind_summary = get_best_markers(
-            smdata, msdata, marker_summary)
+            smdata, msdata, marker_summary, sample_list_a, sample_list_b)
         all_summary.to_csv(
             out_prefix + "_BestMarkerSummaryAll.txt", sep="\t", index=False)
         ind_summary.to_csv(
             out_prefix + "_BestMarkerSummaryInd.txt", sep="\t", index=False)
 
     if options.task_find_differences:
-        differences = find_differences(smdata)
+        print(f"Finding polymorphic markers...")
+        differences = find_differences(smdata, sample_list_a, sample_list_b)
+        print(f"Writing polymorphic markers...")
         differences.to_csv(out_prefix + "_differences.txt",
                            sep="\t", index=False)
 
     if options.task_checkperformance:
         print("Checking performance..")
-        performance = check_performance(smdata)
-        print(f"Total combinations: {performance[0]}")
+        performance = check_performance(smdata, sample_list_a, sample_list_b)
+        print(f"------------------------------")
+        print(f"Marker Performance on the Data")
+        print(f"------------------------------")
+        print(f"-----------------------------------------------------------------")
         print(
-            f"Combinations with ZERO polymorphic markers: {performance[1]} ({round((performance[1]/performance[0])*100,2)} %)")
+            f"Total combinations                        | {performance[0]}\t\t\t|")
         print(
-            f"Combinations with >= 1 polymorphic markers: {performance[2]} ({round((performance[2]/performance[0])*100,2)} %)")
+            f"Combinations with ZERO polymorphic markers| {performance[1]} ({round((performance[1]/performance[0])*100,2)} %)\t\t|")
         print(
-            f"Combinations with >= 2 polymorphic markers: {performance[3]} ({round((performance[3]/performance[0])*100,2)} %)")
+            f"Combinations with >= 1 polymorphic markers| {performance[2]} ({round((performance[2]/performance[0])*100,2)} %)\t|")
+        print(
+            f"Combinations with >= 2 polymorphic markers| {performance[3]} ({round((performance[3]/performance[0])*100,2)} %)\t|")
+        print(f"-----------------------------------------------------------------")
 
     if options.task_write_grid:
         print("Writing Grid file..")
@@ -167,15 +160,6 @@ if __name__ == '__main__':
     if options.task_make_plots:
         print("Writing SNP plots..")
         make_snp_plots(gt_data.msdata, markers, out_prefix, gt_data.name)
-
-    # print("Writing Grid file..")
-    # write_grid_file(outdir + "/out_grid_flt.csv", smdata, markers)
-
-    # print("Writing Flapjack file..")
-    # write_flapjack_file(outdir + "/out_FJ_flt.data", smdata, markers)
-
-    # print("Writing Hapmap file..")
-    # write_hapmap_file(outdir + "/out_flt.hmp.txt", smdata, markers)
 
     # print("Checking performance..")
     # performance = check_performance(smdata)
@@ -218,3 +202,4 @@ if __name__ == '__main__':
     # print(list(ind_summary.loc[count]['marker']))
     # extract_markers = list(ind_summary.loc[count]['marker'])
     # extract_markers = extract_dict(markers, extract_markers)
+    return

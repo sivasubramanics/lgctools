@@ -57,7 +57,8 @@ def get_best_markers(smdata, msdata, marker_summary, sample_list_a=[], sample_li
                 tmp_markers = markers.copy()
                 tmp_markers.remove(marker)
                 # print(f"\r{len(markers)} - {no_marker}")
-                print(f"\r{len(markers)} - {no_marker}", end='', flush=True)
+                print(f"\rStatus: {len(markers)} - {no_marker}",
+                      end='  ', flush=True)
                 # sys.stdout.flush()
                 tmp_smdata = subset_gtdata(
                     smdata, tmp_markers, samples, 'samplefast')
@@ -105,5 +106,5 @@ def get_best_markers(smdata, msdata, marker_summary, sample_list_a=[], sample_li
         msdata = subset_gtdata(msdata, markers, samples, 'markerfast')
     best_markers_summary = best_markers_summary.sort_values(
         by=['marker_count', 'min_two_count'], ascending=[False, True])
-    print(NEWLINE)
+    print()
     return overall_summary, best_markers_summary
