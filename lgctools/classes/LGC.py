@@ -2,14 +2,16 @@ from utils.definitions import *
 from collections import defaultdict
 from classes.Data import *
 
+
 class LGC():
     """
     Class that holds genotype data from LGC file
     """
+
     def __init__(self, in_lgc_file):
         # self.name = name
         self.get_data(in_lgc_file)
-        
+
     def get_data(self, in_lgc_file):
         flag_data = 0
         count_data_points = 0
@@ -24,7 +26,7 @@ class LGC():
                 if line == "":
                     flag_data = 0
                     continue
-                if line == 'Data':
+                if entries[0] == 'Data':
                     flag_data = 1
                     continue
                 if flag_data == 1:
@@ -47,5 +49,3 @@ class LGC():
                     msdata[marker].put_data(sample, call)
         self.smdata = smdata
         self.msdata = msdata
-                    
-                    

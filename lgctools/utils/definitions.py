@@ -17,24 +17,28 @@ HMPHEAD = ("rs#", "alleles", "chrom", "pos", "strand", "assembly#", "center", "p
            "QCcode")
 HMPNA = ['NA', 'NA', 'NA', 'NA', 'NA', 'NA']
 MULTIPROCESSING = True
-IUPAC = {'A':'A:A', 
-         'T':'T:T', 
-         'C':'C:C', 
-         'G':'G:G', 
-         'N':'N:N', 
-         'R':'A:G', 
-         'S':'C:G', 
-         'M':'A:C', 
-         'Y':'C:T', 
-         'W':'A:T', 
-         'K':'G:T'}
-SAMPLE_MISSING_CUTOFF = 80
-MARKER_MISSING_CUTOFF = 100
-MARKER_MAF_CUTOFF = 0
-TASKS = ['convert', 'reheader', 'makeplots', 'summary', 'merge', 'differences', 'performance', 'bestmarkers', ]
+IUPAC = {'A': 'A:A',
+         'T': 'T:T',
+         'C': 'C:C',
+         'G': 'G:G',
+         'N': 'N:N',
+         'R': 'A:G',
+         'S': 'C:G',
+         'M': 'A:C',
+         'Y': 'C:T',
+         'W': 'A:T',
+         'K': 'G:T'}
+SAMPLE_MISSING_MAXIMUM = 80
+MARKER_MISSING_MAXIMUM = 100
+MARKER_PIC_MINIMUM = 0
+MARKER_MAF_MINIMUM = 0
+CUTOFF_FONE = 60
+CUTOFF_CONSENSUS = 75
+TASKS = ['convert', 'reheader', 'makeplots', 'summary',
+         'merge', 'differences', 'performance', 'bestmarkers', ]
 
 FORMATS = ['lgc', 'grid', 'hmp', 'fjk']
-USAGE="""
+USAGE = """
 Program: lgctools (Tools for processing LGC files)
 Version: 0.1
 
@@ -65,4 +69,3 @@ Tasks:
      fwdbreed            analyze genotype data for favorable allele propotions
      
 """
-

@@ -6,6 +6,7 @@ import sys
 import os
 import pandas as pd
 
+
 def write_grid_file(outfile, smdata, markers, *args):
     """
     Writes genotype data in grid csv file format
@@ -26,12 +27,14 @@ def write_grid_file(outfile, smdata, markers, *args):
             outfile_handle.write(sample)
         for marker in markers:
             if marker in smdata[sample].data:
-                outfile_handle.write(CSV + smdata[sample].data[marker].__str__())
+                outfile_handle.write(
+                    CSV + smdata[sample].data[marker].__str__())
             else:
                 outfile_handle.write(CSV + 'N:N')
         outfile_handle.write(NEWLINE)
     outfile_handle.close()
-    
+
+
 def write_flapjack_file(outfile, smdata, markers, *args):
     """
     Writes genotype data in flapjack file format
@@ -53,13 +56,14 @@ def write_flapjack_file(outfile, smdata, markers, *args):
             outfile_handle.write(sample)
         for marker in markers:
             if marker in smdata[sample].data:
-                outfile_handle.write(TAB + to_flapjack(smdata[sample].data[marker].__str__()))
+                outfile_handle.write(
+                    TAB + to_flapjack(smdata[sample].data[marker].__str__()))
             else:
                 outfile_handle.write(TAB + 'N/N')
         outfile_handle.write(NEWLINE)
     outfile_handle.close()
-    
-    
+
+
 def write_hapmap_file(outfile, sm_data, markers, *args):
     """
     Writes genotype data in hapmap file format
@@ -86,19 +90,21 @@ def write_hapmap_file(outfile, sm_data, markers, *args):
             head_line.append(sample)
         for marker in markers:
             if marker in sm_data[sample].data:
-                hmp_data[marker].append(to_hmp(sm_data[sample].data[marker].__str__()))
+                hmp_data[marker].append(
+                    to_hmp(sm_data[sample].data[marker].__str__()))
             else:
                 hmp_data[marker].append('N/N')
     # outfile_handle.write(TAB.join(head_line) + NEWLINE)
-    hapmap = pd.DataFrame(columns = head_line)
+    hapmap = pd.DataFrame(columns=head_line)
     for marker in hmp_data:
         hapmap.loc[len(hapmap.index)] = hmp_data[marker]
         # outfile_handle.write(TAB.join(hmp_data[marker]) + NEWLINE)
     hapmap.chrom = pd.to_numeric(hapmap.chrom, errors='coerce')
     hapmap.pos = pd.to_numeric(hapmap.pos, errors='coerce')
     hapmap = hapmap.sort_values(by=['chrom', 'pos'])
-    hapmap.to_csv(outfile, sep = "\t", index=False)
+    hapmap.to_csv(outfile, sep="\t", index=False)
     outfile_handle.close()
+
 
 def make_markers(msdata, markers, marker_info_dict):
     for marker in msdata:
@@ -106,6 +112,7 @@ def make_markers(msdata, markers, marker_info_dict):
         if marker in marker_info_dict:
             markers[marker].put_marker_info(marker_info_dict[marker])
     return markers
+
 
 def get_markers(in_lgc_file, markers, marker_info_dict):
     """
@@ -127,7 +134,7 @@ def get_markers(in_lgc_file, markers, marker_info_dict):
             if line == "":
                 flag_snp = 0
                 continue
-            if line == 'SNPs':
+            if entries[0] == 'SNPs':
                 flag_snp = 1
                 continue
             if flag_snp == 1:
@@ -138,12 +145,14 @@ def get_markers(in_lgc_file, markers, marker_info_dict):
                 if entries[0] not in markers:
                     markers[entries[0]] = Markermetadata(entries[0])
                     if entries[0] in marker_info_dict:
-                        markers[entries[0]].put_marker_info(marker_info_dict[entries[0]])
+                        markers[entries[0]].put_marker_info(
+                            marker_info_dict[entries[0]])
                 if entries[0] not in markers_for_plot:
                     markers_for_plot[entries[0]] = Markermetadata(entries[0])
                 markers[entries[0]].put_alleles(line)
                 markers_for_plot[entries[0]].put_alleles(line)
     return markers
+
 
 def get_marker_info():
     """
@@ -153,7 +162,7 @@ def get_marker_info():
     marker_info_dict = defaultdict()
     tmp_path = os.path.abspath(sys.argv[0])
     cur_dir, file_name = os.path.split(tmp_path)
-    with open(cur_dir + '/data/' + 'KASP_MarkerInfo.txt') as f:
+    with open(cur_dir + '/../tests/data/' + 'KASP_MarkerInfo.txt') as f:
         for line in f:
             line = line.strip()
             lineNo += 1

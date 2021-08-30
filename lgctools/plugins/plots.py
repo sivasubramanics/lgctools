@@ -3,7 +3,8 @@ from utils.definitions import *
 from utils.utils import *
 import plotly.graph_objects as go
 
-def make_snp_plots(msdata, markers, outdir, data_name):
+
+def make_snp_plots(msdata, markers, out_prefix, data_name):
     """
     Writes SNP quality plots for the markers
     """
@@ -23,9 +24,10 @@ def make_snp_plots(msdata, markers, outdir, data_name):
                 coords[allele]['y'] = []
             coords[allele]['x'].append(xvalue)
             coords[allele]['y'].append(yvalue)
-        alleles = [markers[marker].get_allele_x(), markers[marker].get_allele_y(), markers[marker].get_allele_xy()]
+        alleles = [markers[marker].get_allele_x(
+        ), markers[marker].get_allele_y(), markers[marker].get_allele_xy()]
         alleles += MISSING_ALLELES
-        out_image = outdir + '/' + data_name + '_' + marker + ".png"
+        out_image = out_prefix + '_' + data_name + '_' + marker + ".png"
         fig = go.Figure()
         fig.update_layout(
             title={
