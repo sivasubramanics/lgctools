@@ -1,5 +1,6 @@
 import argparse
 import inspect
+import time
 from collections import defaultdict
 from utils.definitions import *
 from classes.Data import *
@@ -316,3 +317,7 @@ def get_list_from_file(in_file):
                 exit(1)
             out_list.append(line)
     return out_list
+
+
+def print_log(in_str):
+    print(f"[{time.asctime()}] - {in_str}")

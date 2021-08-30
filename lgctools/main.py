@@ -59,30 +59,29 @@ def main():
 
     if options.marker_list_file:
         marker_query = get_list_from_file(options.marker_list_file)
-        print(marker_query)
     else:
         marker_query = markers.copy()
 
     if options.sample_list_file or options.marker_list_file:
-        print(f"Subsetting genotype data...")
+        print_log(f"Subsetting genotype data...")
         smdata = subset_gtdata(smdata, marker_query,
                                sample_query, 'samplefast')
         msdata = subset_gtdata(msdata, marker_query,
                                sample_query, 'markerfast')
 
     if options.task_run_summary:
-        print("Writing Marker Summary..")
+        print_log("Writing Marker Summary..")
         marker_summary = get_marker_summary(msdata)
         marker_summary.to_csv(out_prefix + "_marker_summary.txt",
                               sep="\t", index=False)
 
-        print("Writing Sample Summary..")
+        print_log("Writing Sample Summary..")
         sample_summary = get_sample_summary(smdata)
         sample_summary.to_csv(out_prefix + "_sample_summary.txt",
                               sep="\t", index=False)
 
     if options.task_filter:
-        print(f"Filtering data")
+        print_log(f"Filtering data")
         flt_sample_summary = sample_summary.loc[(sample_summary['missing_percentage']
                                                 < options.cutoff_mx_missing_sample)]
         samples = filter_samples(samples, flt_sample_summary)
@@ -93,10 +92,10 @@ def main():
         smdata = subset_gtdata(smdata, markers, samples, 'samplefast')
         msdata = subset_gtdata(msdata, markers, samples, 'markerfast')
         if options.task_run_summary:
-            print("Writing Filtered Sample Summary..")
+            print_log("Writing Filtered Sample Summary..")
             flt_sample_summary.to_csv(
                 out_prefix + "_sample_summary_flt.txt", sep="\t", index=False)
-            print("Writing Filtered Marker Summary..")
+            print_log("Writing Filtered Marker Summary..")
             flt_marker_summary.to_csv(
                 out_prefix + "_marker_summary_flt.txt", sep="\t", index=False)
 
@@ -104,10 +103,10 @@ def main():
         sample_list_a = get_list_from_file(options.sample_list_a_file)
         sample_list_b = get_list_from_file(options.sample_list_b_file)
     elif options.sample_list_a_file and not options.sample_list_b_file:
-        print(f"ERROR: Female parents list file missing.. Quiting...")
+        print_log(f"ERROR: Female parents list file missing.. Quiting...")
         exit(1)
     elif not options.sample_list_a_file and options.sample_list_b_file:
-        print(f"ERROR: Male parents list file missing.. Quiting...")
+        print_log(f"ERROR: Male parents list file missing.. Quiting...")
         exit(1)
     else:
         sample_list_a = []
@@ -122,18 +121,18 @@ def main():
             out_prefix + "_BestMarkerSummaryInd.txt", sep="\t", index=False)
 
     if options.task_find_differences:
-        print(f"Finding polymorphic markers...")
+        print_log(f"Finding polymorphic markers...")
         differences = find_differences(smdata, sample_list_a, sample_list_b)
-        print(f"Writing polymorphic markers...")
+        print_log(f"Writing polymorphic markers...")
         differences.to_csv(out_prefix + "_differences.txt",
                            sep="\t", index=False)
 
     if options.task_checkperformance:
-        print("Checking performance..")
+        print_log("Checking performance..")
         performance = check_performance(smdata, sample_list_a, sample_list_b)
-        print(f"------------------------------")
-        print(f"Marker Performance on the Data")
-        print(f"------------------------------")
+        print(f"------------------------------------------------------------")
+        print_log(f"Marker Performance on the Data")
+        print(f"------------------------------------------------------------")
         print(f"-----------------------------------------------------------------")
         print(
             f"Total combinations                        | {performance[0]}\t\t\t|")
@@ -146,34 +145,20 @@ def main():
         print(f"-----------------------------------------------------------------")
 
     if options.task_write_grid:
-        print("Writing Grid file..")
+        print_log("Writing Grid file..")
         write_grid_file(out_prefix + "_out_grid.csv", smdata, markers)
 
     if options.task_write_fjk:
-        print("Writing Flapjack file..")
+        print_log("Writing Flapjack file..")
         write_flapjack_file(out_prefix + "_out_FJ.data", smdata, markers)
 
     if options.task_write_hapmap:
-        print("Writing Hapmap file..")
+        print_log("Writing Hapmap file..")
         write_hapmap_file(out_prefix + "_out.hmp.txt", smdata, markers)
 
     if options.task_make_plots:
-        print("Writing SNP plots..")
+        print_log("Writing SNP plots..")
         make_snp_plots(gt_data.msdata, markers, out_prefix, gt_data.name)
-
-    # print("Checking performance..")
-    # performance = check_performance(smdata)
-    # print(f"Total combinations: {performance[0]}")
-    # print(f"Combinations with ZERO polymorphic markers: {performance[1]} ({round((performance[1]/performance[0])*100,2)} %)")
-    # print(f"Combinations with >= 1 polymorphic markers: {performance[2]} ({round((performance[2]/performance[0])*100,2)} %)")
-    # print(f"Combinations with >= 2 polymorphic markers: {performance[3]} ({round((performance[3]/performance[0])*100,2)} %)")
-
-    # # smdata, msdata = fill_gaps_gtdata(smdata, msdata)
-    # all_summary, ind_summary = get_best_markers(smdata, msdata, marker_summary)
-    # all_summary.to_csv(outdir + "/BestMarkerSummaryAll_flt.txt",
-    #                    sep="\t", index=False)
-    # ind_summary.to_csv(outdir + "/BestMarkerSummaryInd_flt.txt",
-    #                    sep="\t", index=False)
 
     # filename = outdir + "/BestMarkerSummaryInd.txt"
     # ind_summary = pd.read_csv(filename, sep="\t", index_col='marker_count')
@@ -185,17 +170,6 @@ def main():
     # tmp_smdata = subset_gtdata(smdata, extract_markers, samples, 'samplefast')
     # tmp_msdata = subset_gtdata(msdata, extract_markers, samples, 'markerfast')
 
-    # print("Writing Hapmap file..")
-    # write_hapmap_file(outdir + "/15_out.hmp.txt", tmp_smdata, extract_markers)
-
-    # gt_data = Hapmap(outdir + "/15_out.hmp.txt")
-    # print("Checking performance..")
-    # performance = check_performance(gt_data.smdata)
-    # print(f"Total combinations: {performance[0]}")
-    # print(f"Combinations with ZERO polymorphic markers: {performance[1]}")
-    # print(f"Combinations with >= 1 polymorphic markers: {performance[2]}")
-    # print(f"Combinations with >= 2 polymorphic markers: {performance[3]}")
-
     # filename = outdir + "/BestMarkerSummaryInd.txt"
     # ind_summary = pd.read_csv(filename, sep="\t", index_col='marker_count')
     # count = 15
@@ -203,3 +177,7 @@ def main():
     # extract_markers = list(ind_summary.loc[count]['marker'])
     # extract_markers = extract_dict(markers, extract_markers)
     return
+
+
+if __name__ == '__main__':
+    main()

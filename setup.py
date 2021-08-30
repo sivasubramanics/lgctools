@@ -12,7 +12,7 @@ setup(
     author='S.Sivasubramani',
     author_email='c.s.sivasubramani@gmail.com',
     url='https://github.com/siavsubramanics/lgctools',
-    description='Demo Package for GfG Article.',
+    description='Processes the LGC files for tasks involved in purity check.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     license='MIT',
