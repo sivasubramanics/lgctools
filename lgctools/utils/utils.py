@@ -218,7 +218,6 @@ def extract_dict(in_dict, keys_list):
     for key in keys_list:
         if key in in_dict:
             out_dict[key] = in_dict[key]
-
     return out_dict
 
 
@@ -261,6 +260,8 @@ def get_opts():
                         action='store_true', help="Create plots based on the LGC data")
     parser.add_argument('--bestmarkers', dest='task_bestmarkers', default=False,
                         action='store_true', help="Find best markers from the given marker set")
+    parser.add_argument('--markercloud', dest='task_markercloud', default=False,
+                        action='store_true', help="Based on best marker summary make word cloud")
     parser.add_argument('--filter', dest='task_filter', default=False,
                         action='store_true', help="Filter genotype data")
     parser.add_argument('--pedver', dest='task_pedver', default=False,
@@ -275,6 +276,8 @@ def get_opts():
                         metavar="<FILE>", help="LGC Grid Matrix File")
     parser.add_argument("--grid-files", dest="grid_files",
                         metavar="<FILES>", help="Comma seperated LGC Grid Matrix Files")
+    parser.add_argument("--hmp-file", dest="hapmap_file",
+                        metavar="<FILE>", help="Hapmap genotype File")
     parser.add_argument("--meta-data", dest="metadata_file",
                         metavar="<FILE>", help="Parent information file")
     parser.add_argument("--marker-list", dest="marker_list_file",

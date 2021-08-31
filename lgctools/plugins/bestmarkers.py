@@ -1,10 +1,23 @@
 from plugins.performance import *
+from wordcloud import WordCloud, STOPWORDS
 import pandas as pd
 import sys
 from multiprocessing import Process
 import multiprocessing
 from utils.definitions import *
 from utils.utils import *
+
+
+def make_wordcloud(best_marker_summary, outfile):
+    text = " ".join(cat.split()[0] for cat in best_marker_summary.marker)
+    stopwords = set(STOPWORDS)
+    wordcloud = WordCloud(width=800, height=800,
+                          background_color='white',
+                          stopwords=stopwords,
+                          prefer_horizontal=0.2,
+                          min_font_size=10).generate(text)
+    wordcloud.to_file(outfile)
+    return
 
 
 def get_bad_marker(marker_scores):

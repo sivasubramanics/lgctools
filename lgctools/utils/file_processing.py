@@ -16,7 +16,7 @@ def write_grid_file(outfile, smdata, markers, *args):
     else:
         sample_dict = defaultdict()
     outfile_handle = open(outfile, 'w')
-    outfile_handle.write('DNA\\Assay')
+    outfile_handle.write('DNA \\ Assay')
     for marker in markers:
         outfile_handle.write(CSV + marker)
     outfile_handle.write(NEWLINE)

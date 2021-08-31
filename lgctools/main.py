@@ -1,29 +1,27 @@
 #!/usr/bin/env python
 
-from classes.Hapmap import Hapmap
-from plugins.bestmarkers import get_best_markers
-from plugins.performance import check_performance
+from plugins.bestmarkers import *
+from plugins.performance import *
 from plugins.differences import *
-from plugins.plots import make_snp_plots
+from plugins.plots import *
+from plugins.summary import *
 from classes.Data import Markermetadata
-from utils.file_processing import *
-from plugins.summary import get_marker_summary, get_sample_summary
 from classes.LGC import LGC
 from classes.Grid import Grid
+from classes.Hapmap import Hapmap
+from utils.file_processing import *
 from utils.definitions import *
 from collections import defaultdict
 import sys
 import time
-# from datetime import datetime
 import warnings
 import numpy as np
-from classes.Getoptions import *
+
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 
 def main():
-    # if __name__ == '__main__':
-    # main()
+
     start_time = time.time()
 
     parser = get_opts()
@@ -53,7 +51,18 @@ def main():
         marker = make_markers(msdata, markers, marker_info)
         samples = list(smdata.keys())
 
+    if options.hapmap_file:
+        print_log(
+            f"Reading input Hapmap genotype data ({options.hapmap_file})...")
+        gt_data = Hapmap(options.hapmap_file)
+        msdata = gt_data.msdata
+        smdata = gt_data.smdata
+        marker = make_markers(msdata, markers, marker_info)
+        samples = list(smdata.keys())
+
     smdata, msdata = fill_gaps_gtdata(smdata, msdata)
+    marker_summary = get_marker_summary(msdata)
+    sample_summary = get_sample_summary(smdata)
     print_log(
         f"Input data : {len(smdata)} samples x {len(msdata)} markers")
 
@@ -73,6 +82,8 @@ def main():
                                sample_query, 'samplefast')
         msdata = subset_gtdata(msdata, marker_query,
                                sample_query, 'markerfast')
+        marker_summary = get_marker_summary(msdata)
+        sample_summary = get_sample_summary(smdata)
         print_log(
             f"Subset data : {len(smdata)} samples x {len(msdata)} markers")
 
@@ -126,12 +137,18 @@ def main():
         sample_list_b = []
 
     if options.task_bestmarkers:
+        print_log(f"Finding best markers...")
+        marker_summary = get_marker_summary(msdata)
+        sample_summary = get_sample_summary(smdata)
         all_summary, ind_summary = get_best_markers(
             smdata, msdata, marker_summary, sample_list_a, sample_list_b)
         all_summary.to_csv(
             out_prefix + "_BestMarkerSummaryAll.txt", sep="\t", index=False)
         ind_summary.to_csv(
             out_prefix + "_BestMarkerSummaryInd.txt", sep="\t", index=False)
+        if options.task_markercloud:
+            print_log(f"Making Best Markers cloud Image...")
+            make_wordcloud(ind_summary, out_prefix + '_BestMarkerCloud.png')
 
     if options.task_find_differences:
         print_log(f"Finding polymorphic markers...")
@@ -174,26 +191,11 @@ def main():
         print_log("Writing SNP plots...")
         make_snp_plots(gt_data.msdata, markers, out_prefix, gt_data.name)
 
-    # filename = outdir + "/BestMarkerSummaryInd.txt"
-    # ind_summary = pd.read_csv(filename, sep="\t", index_col='marker_count')
-    # count = 15
-    # print(list(ind_summary.loc[count]['marker']))
-    # extract_markers = list(ind_summary.loc[count]['marker'])
-    # extract_markers = extract_dict(markers, extract_markers)
-
-    # tmp_smdata = subset_gtdata(smdata, extract_markers, samples, 'samplefast')
-    # tmp_msdata = subset_gtdata(msdata, extract_markers, samples, 'markerfast')
-
-    # filename = outdir + "/BestMarkerSummaryInd.txt"
-    # ind_summary = pd.read_csv(filename, sep="\t", index_col='marker_count')
-    # count = 15
-    # print(list(ind_summary.loc[count]['marker']))
-    # extract_markers = list(ind_summary.loc[count]['marker'])
-    # extract_markers = extract_dict(markers, extract_markers)
     end_time = time.time()
     process_time = round(end_time - start_time)
     print_log(
         f"Total Time taken for the process {secondsToText(process_time)}")
+    print()
     return
 
 
