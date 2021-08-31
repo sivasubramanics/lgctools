@@ -13,6 +13,8 @@ from classes.Grid import Grid
 from utils.definitions import *
 from collections import defaultdict
 import sys
+import time
+# from datetime import datetime
 import warnings
 import numpy as np
 from classes.Getoptions import *
@@ -22,6 +24,7 @@ warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 def main():
     # if __name__ == '__main__':
     # main()
+    start_time = time.time()
 
     parser = get_opts()
     options = parser.parse_args()
@@ -35,22 +38,24 @@ def main():
     out_prefix = options.out_prefix
 
     if options.lgc_file:
-        lgc_file = options.lgc_file
-        gt_data = LGC(lgc_file)
+        print_log(f"Reading input LGC genotype data ({options.lgc_file})...")
+        gt_data = LGC(options.lgc_file)
         msdata = gt_data.msdata
         smdata = gt_data.smdata
-        markers = get_markers(lgc_file, markers, marker_info)
+        markers = get_markers(options.lgc_file, markers, marker_info)
         samples = list(smdata.keys())
 
     if options.grid_file:
-        grid_file = options.grid_file
-        gt_data = Grid(grid_file)
+        print_log(f"Reading input Grid genotype data ({options.grid_file})...")
+        gt_data = Grid(options.grid_file)
         msdata = gt_data.msdata
         smdata = gt_data.smdata
         marker = make_markers(msdata, markers, marker_info)
         samples = list(smdata.keys())
 
     smdata, msdata = fill_gaps_gtdata(smdata, msdata)
+    print_log(
+        f"Input data : {len(smdata)} samples x {len(msdata)} markers")
 
     if options.sample_list_file:
         sample_query = get_list_from_file(options.sample_list_file)
@@ -68,20 +73,24 @@ def main():
                                sample_query, 'samplefast')
         msdata = subset_gtdata(msdata, marker_query,
                                sample_query, 'markerfast')
+        print_log(
+            f"Subset data : {len(smdata)} samples x {len(msdata)} markers")
 
     if options.task_run_summary:
-        print_log("Writing Marker Summary..")
         marker_summary = get_marker_summary(msdata)
+        print_log(
+            f"Writing Marker Summary ({out_prefix + '_marker_summary.txt'})...")
         marker_summary.to_csv(out_prefix + "_marker_summary.txt",
                               sep="\t", index=False)
 
-        print_log("Writing Sample Summary..")
         sample_summary = get_sample_summary(smdata)
+        print_log(
+            f"Writing Sample Summary ({out_prefix + '_sample_summary.txt'})..")
         sample_summary.to_csv(out_prefix + "_sample_summary.txt",
                               sep="\t", index=False)
 
     if options.task_filter:
-        print_log(f"Filtering data")
+        print_log(f"Filtering data...")
         flt_sample_summary = sample_summary.loc[(sample_summary['missing_percentage']
                                                 < options.cutoff_mx_missing_sample)]
         samples = filter_samples(samples, flt_sample_summary)
@@ -91,11 +100,15 @@ def main():
         markers = filter_markers(markers, flt_marker_summary)
         smdata = subset_gtdata(smdata, markers, samples, 'samplefast')
         msdata = subset_gtdata(msdata, markers, samples, 'markerfast')
+        print_log(
+            f"Filtered data : {len(smdata)} samples x {len(msdata)} markers")
         if options.task_run_summary:
-            print_log("Writing Filtered Sample Summary..")
+            print_log(
+                f"Writing Filtered Sample Summary ({out_prefix + '_sample_summary_flt.txt'})...")
             flt_sample_summary.to_csv(
                 out_prefix + "_sample_summary_flt.txt", sep="\t", index=False)
-            print_log("Writing Filtered Marker Summary..")
+            print_log(
+                f"Writing Filtered Marker Summary ({out_prefix + '_marker_summary_flt.txt'})...")
             flt_marker_summary.to_csv(
                 out_prefix + "_marker_summary_flt.txt", sep="\t", index=False)
 
@@ -103,10 +116,10 @@ def main():
         sample_list_a = get_list_from_file(options.sample_list_a_file)
         sample_list_b = get_list_from_file(options.sample_list_b_file)
     elif options.sample_list_a_file and not options.sample_list_b_file:
-        print_log(f"ERROR: Female parents list file missing.. Quiting...")
+        print_log(f"ERROR: Female parents list file missing... Quiting...")
         exit(1)
     elif not options.sample_list_a_file and options.sample_list_b_file:
-        print_log(f"ERROR: Male parents list file missing.. Quiting...")
+        print_log(f"ERROR: Male parents list file missing... Quiting...")
         exit(1)
     else:
         sample_list_a = []
@@ -123,41 +136,42 @@ def main():
     if options.task_find_differences:
         print_log(f"Finding polymorphic markers...")
         differences = find_differences(smdata, sample_list_a, sample_list_b)
-        print_log(f"Writing polymorphic markers...")
+        print_log(
+            f"Writing polymorphic markers ({out_prefix + '_differences.txt'})...")
         differences.to_csv(out_prefix + "_differences.txt",
                            sep="\t", index=False)
 
     if options.task_checkperformance:
-        print_log("Checking performance..")
+        print_log("Checking performance...")
         performance = check_performance(smdata, sample_list_a, sample_list_b)
         print(f"------------------------------------------------------------")
         print_log(f"Marker Performance on the Data")
         print(f"------------------------------------------------------------")
-        print(f"-----------------------------------------------------------------")
+        print(f"------------------------------------------------------------")
         print(
-            f"Total combinations                        | {performance[0]}\t\t\t|")
+            f"Total combinations                        : {performance[0]}")
         print(
-            f"Combinations with ZERO polymorphic markers| {performance[1]} ({round((performance[1]/performance[0])*100,2)} %)\t\t|")
+            f"Combinations with ZERO polymorphic markers: {performance[1]} ({round((performance[1]/performance[0])*100,2)} %)")
         print(
-            f"Combinations with >= 1 polymorphic markers| {performance[2]} ({round((performance[2]/performance[0])*100,2)} %)\t|")
+            f"Combinations with >= 1 polymorphic markers: {performance[2]} ({round((performance[2]/performance[0])*100,2)} %)")
         print(
-            f"Combinations with >= 2 polymorphic markers| {performance[3]} ({round((performance[3]/performance[0])*100,2)} %)\t|")
-        print(f"-----------------------------------------------------------------")
+            f"Combinations with >= 2 polymorphic markers: {performance[3]} ({round((performance[3]/performance[0])*100,2)} %)")
+        print(f"------------------------------------------------------------")
 
     if options.task_write_grid:
-        print_log("Writing Grid file..")
+        print_log(f"Writing Grid file ({out_prefix + '_out_grid.csv'})...")
         write_grid_file(out_prefix + "_out_grid.csv", smdata, markers)
 
     if options.task_write_fjk:
-        print_log("Writing Flapjack file..")
+        print_log(f"Writing Flapjack file ({out_prefix + '_out_FJ.data'})...")
         write_flapjack_file(out_prefix + "_out_FJ.data", smdata, markers)
 
     if options.task_write_hapmap:
-        print_log("Writing Hapmap file..")
+        print_log(f"Writing Hapmap file ({out_prefix + '_out.hmp.txt'})...")
         write_hapmap_file(out_prefix + "_out.hmp.txt", smdata, markers)
 
     if options.task_make_plots:
-        print_log("Writing SNP plots..")
+        print_log("Writing SNP plots...")
         make_snp_plots(gt_data.msdata, markers, out_prefix, gt_data.name)
 
     # filename = outdir + "/BestMarkerSummaryInd.txt"
@@ -176,6 +190,10 @@ def main():
     # print(list(ind_summary.loc[count]['marker']))
     # extract_markers = list(ind_summary.loc[count]['marker'])
     # extract_markers = extract_dict(markers, extract_markers)
+    end_time = time.time()
+    process_time = round(end_time - start_time)
+    print_log(
+        f"Total Time taken for the process {secondsToText(process_time)}")
     return
 
 

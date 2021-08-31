@@ -57,7 +57,7 @@ def get_best_markers(smdata, msdata, marker_summary, sample_list_a=[], sample_li
                 tmp_markers = markers.copy()
                 tmp_markers.remove(marker)
                 # print(f"\r{len(markers)} - {no_marker}")
-                print(f"\rStatus: {len(markers)} - {no_marker}",
+                print(f"\rStatus: {len(markers)} marker - {no_marker} iteration",
                       end='   ', flush=True)
                 sys.stdout.flush()
                 tmp_smdata = subset_gtdata(
