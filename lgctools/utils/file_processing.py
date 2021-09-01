@@ -229,3 +229,24 @@ def get_samplemap(in_samplemap_file):
     print_log(
         f"Sample map dictionary contains {len(samplemap_dict)} valid genotypes with reference.")
     return samplemap_dict
+
+
+def get_replicates(in_designation_file):
+    replicates = defaultdict()
+    samples = []
+    line_count = 0
+    with open(in_designation_file, 'r') as fh:
+        for line in fh:
+            line = line.strip()
+            line_count += 1
+            if line_count == 1:
+                continue
+            entries = line.split(TAB)
+            if len(entries) < 2:
+                continue
+            if entries[0] in samples:
+                continue
+            if not entries[1] in replicates:
+                replicates[entries[1]] = []
+            replicates[entries[1]].append(entries[0])
+    return replicates

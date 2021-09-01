@@ -176,6 +176,15 @@ def main():
             print_log(f"Making Best Markers cloud Image...")
             make_wordcloud(ind_summary, out_prefix + '_BestMarkerCloud.png')
 
+    if options.task_consensus:
+        if not options.designation_file:
+            print_log(
+                f"ERROR: Designation file is needed to call consensus... Quiting...")
+            exit(1)
+        replicates = get_replicates(options.designation_file)
+        for rep in replicates:
+            print(rep, len(replicates[rep]))
+
     if options.task_find_differences:
         print_log(f"Finding polymorphic markers...")
         differences = find_differences(smdata, sample_list_a, sample_list_b)
