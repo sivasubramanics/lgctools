@@ -3,6 +3,7 @@
 from plugins.bestmarkers import *
 from plugins.performance import *
 from plugins.differences import *
+from plugins.rename import *
 from plugins.plots import *
 from plugins.summary import *
 from classes.Data import Markermetadata
@@ -34,6 +35,12 @@ def main():
     marker_info = get_marker_info()
     markers = defaultdict(Markermetadata)
     out_prefix = options.out_prefix
+    smdata, msdata = defaultdict(), defaultdict()
+
+    if options.pedigree_file:
+        print_log(
+            f"Processing complete for pedigree file ({options.pedigree_file})...")
+        pedigree_dict = get_pedigree(options.pedigree_file)
 
     if options.lgc_file:
         print_log(f"Reading input LGC genotype data ({options.lgc_file})...")
@@ -60,11 +67,25 @@ def main():
         marker = make_markers(msdata, markers, marker_info)
         samples = list(smdata.keys())
 
+    if not msdata and not smdata:
+        print_log(
+            f"ERROR: No genotype provided... Quiting...")
+        exit(1)
+
     smdata, msdata = fill_gaps_gtdata(smdata, msdata)
-    marker_summary = get_marker_summary(msdata)
-    sample_summary = get_sample_summary(smdata)
     print_log(
         f"Input data : {len(smdata)} samples x {len(msdata)} markers")
+
+    if options.task_rename:
+        if options.samplemap_file:
+            print_log(
+                f"Processing complete for sample map file ({options.samplemap_file})...")
+            samplemap_dict = get_samplemap(options.samplemap_file)
+            smdata, msdata = rename_data(smdata, msdata, samplemap_dict)
+        else:
+            print_log(
+                f"ERROR: No sample map file provided (--samplemap-file)... Quiting...")
+            exit(1)
 
     if options.sample_list_file:
         sample_query = get_list_from_file(options.sample_list_file)
@@ -82,8 +103,6 @@ def main():
                                sample_query, 'samplefast')
         msdata = subset_gtdata(msdata, marker_query,
                                sample_query, 'markerfast')
-        marker_summary = get_marker_summary(msdata)
-        sample_summary = get_sample_summary(smdata)
         print_log(
             f"Subset data : {len(smdata)} samples x {len(msdata)} markers")
 
@@ -101,6 +120,11 @@ def main():
                               sep="\t", index=False)
 
     if options.task_filter:
+        if not marker_summary:
+            marker_summary = get_marker_summary(msdata)
+        if not sample_summary:
+            sample_summary = get_sample_summary(smdata)
+
         print_log(f"Filtering data...")
         flt_sample_summary = sample_summary.loc[(sample_summary['missing_percentage']
                                                 < options.cutoff_mx_missing_sample)]
@@ -137,9 +161,11 @@ def main():
         sample_list_b = []
 
     if options.task_bestmarkers:
+        if not marker_summary:
+            marker_summary = get_marker_summary(msdata)
+        if not sample_summary:
+            sample_summary = get_sample_summary(smdata)
         print_log(f"Finding best markers...")
-        marker_summary = get_marker_summary(msdata)
-        sample_summary = get_sample_summary(smdata)
         all_summary, ind_summary = get_best_markers(
             smdata, msdata, marker_summary, sample_list_a, sample_list_b)
         all_summary.to_csv(
@@ -192,7 +218,7 @@ def main():
         make_snp_plots(gt_data.msdata, markers, out_prefix, gt_data.name)
 
     end_time = time.time()
-    process_time = round(end_time - start_time)
+    process_time = round(end_time - start_time, 2)
     print_log(
         f"Total Time taken for the process {secondsToText(process_time)}")
     print()

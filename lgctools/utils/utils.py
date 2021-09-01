@@ -246,6 +246,8 @@ def get_opts():
         description="QC pipeline: Processes the LGC file for tasks involved in purity check")
     parser.add_argument('--summary', dest='task_run_summary', default=False,
                         action='store_true', help="Generate sample and marker summary for the data from genotype file")
+    parser.add_argument('--rename', dest='task_rename', default=False,
+                        action='store_true', help="Rename the samples provided in the genotype file")
     parser.add_argument('--out-grid', dest='task_write_grid', default=False,
                         action='store_true', help="Write genotype data in grid file format")
     parser.add_argument('--out-flapjack', dest='task_write_fjk', default=False,
@@ -266,6 +268,8 @@ def get_opts():
                         action='store_true', help="Filter genotype data")
     parser.add_argument('--pedver', dest='task_pedver', default=False,
                         action='store_true', help="Analyze genotype data for F1 Verification")
+    parser.add_argument('--consensus', dest='task_consensus', default=False,
+                        action='store_true', help="Call consensus and make purity reports")
     parser.add_argument('--fwdbreed', dest='task_pedver', default=False,
                         action='store_true', help="Analyze genotype data for favorable allele propotions")
     parser.add_argument("--lgc-file", dest="lgc_file",
@@ -278,6 +282,12 @@ def get_opts():
                         metavar="<FILES>", help="Comma seperated LGC Grid Matrix Files")
     parser.add_argument("--hmp-file", dest="hapmap_file",
                         metavar="<FILE>", help="Hapmap genotype File")
+    parser.add_argument("--samplemap-file", dest="samplemap_file",
+                        metavar="<FILE>", help="Tab seperated sample map file. <SAMPLE_ID> <SAMPLE_NAME>")
+    parser.add_argument("--ped-file", dest="pedigree_file",
+                        metavar="<FILE>", help="Tab seperated Pedigree File. <F_ONE> <PAR_A> <PAR_B>")
+    parser.add_argument("--designation-file", dest="designation_file",
+                        metavar="<FILE>", help="Tab seperated Designations parent File. <SAMPLE_NAME> <DESIGNATION>")
     parser.add_argument("--meta-data", dest="metadata_file",
                         metavar="<FILE>", help="Parent information file")
     parser.add_argument("--marker-list", dest="marker_list_file",

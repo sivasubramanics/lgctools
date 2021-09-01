@@ -2,6 +2,7 @@ from utils.definitions import *
 from utils.utils import *
 from collections import defaultdict
 from classes.Data import Markermetadata
+from classes.Pedigree import Pedigree
 import sys
 import os
 import pandas as pd
@@ -177,3 +178,54 @@ def get_marker_info():
                 marker_info_dict[lineEntries[0]].append(lineEntries[1])
                 marker_info_dict[lineEntries[0]].append(lineEntries[2])
     return marker_info_dict
+
+
+def get_pedigree(in_pedigree_file):
+    pedigree_dict = defaultdict()
+    line_count = 0
+    with open(in_pedigree_file, 'r') as fh:
+        for line in fh:
+            line = line.strip()
+            line_count += 1
+            if line_count == 1:
+                continue
+            entries = line.split(TAB)
+            if len(entries) < 4:
+                continue
+            if entries[0] in pedigree_dict:
+                continue
+            if not entries[0] in pedigree_dict:
+                pedigree_dict[entries[0]] = Pedigree(entries[0])
+                pedigree_dict[entries[0]].set_designation(entries[1])
+                pedigree_dict[entries[0]].set_parent_a(entries[2])
+                pedigree_dict[entries[0]].set_parent_b(entries[3])
+    fh.close()
+    print_log(
+        f"Pedigree dictionary contains {len(pedigree_dict)} valid F-One genotypes with parents.")
+    return pedigree_dict
+
+
+def get_samplemap(in_samplemap_file):
+    samplemap_dict = defaultdict()
+    samples = []
+    line_count = 0
+    with open(in_samplemap_file, 'r') as fh:
+        for line in fh:
+            line = line.strip()
+            line_count += 1
+            if line_count == 1:
+                continue
+            entries = line.split(TAB)
+            if len(entries) < 2:
+                continue
+            if entries[0] in samplemap_dict:
+                continue
+            if entries[1] in samples:
+                continue
+            if not entries[0] in samplemap_dict:
+                samplemap_dict[entries[0]] = entries[1]
+                samples.append(entries[1])
+    fh.close()
+    print_log(
+        f"Sample map dictionary contains {len(samplemap_dict)} valid genotypes with reference.")
+    return samplemap_dict
