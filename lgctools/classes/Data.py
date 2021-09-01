@@ -1,60 +1,77 @@
 from collections import defaultdict
 from utils.definitions import *
 
+
 class SM():
     """
     Class that holds genotype data in sample fast format [sample][marker] = genotype call
     """
+
     def __init__(self, name):
         self.sample_name = name
         self.data = defaultdict()
-        
+
     def put_data(self, marker_name, gt_call):
         self.data[marker_name] = gt_call
+
 
 class MS():
     """
     Class that holds genotype data in marker fast format [marker][sample] = genotype call
     """
+
     def __init__(self, name):
         self.marker_name = name
         self.data = defaultdict()
-        
+
     def put_data(self, sample_name, gt_call):
         self.data[sample_name] = gt_call
+
+    def get_datum(self, sample_name):
+        return self.data[sample_name]
+
+    def get_data(self, sample_names):
+        gt_calls = []
+        for sample in sample_names:
+            if sample in self.data:
+                gt_calls.append(self.data[sample])
+        return gt_calls
+
 
 class Call():
     """
     Class that holds genotype allele call and its x and y coordinates
     """
+
     def __init__(self, call):
         self.call = call
         self.x_value = ""
         self.y_value = ""
-    
+
     def get_xvalue(self):
         return self.x_value
-    
+
     def get_yvalue(self):
         return self.y_value
-    
+
     def put_xvalue(self, x_value):
         self.x_value = x_value
-        
+
     def put_yvalue(self, y_value):
         self.y_value = y_value
-        
+
     def __str__(self):
         return str(self.call)
-    
+
     def __repr__(self):
         return str(self.call)
-    
-    
+
+
 class Markermetadata():
     """
     Class that marker metadata
     """
+
     def __init__(self, marker_name):
         self.name = marker_name
         self.allele_x = ""
@@ -113,7 +130,3 @@ class Markermetadata():
         if marker_info:
             self.put_chr(marker_info[0])
             self.put_position(marker_info[1])
-    
-    
-            
-

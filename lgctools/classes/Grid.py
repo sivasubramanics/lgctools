@@ -3,13 +3,15 @@ from collections import defaultdict
 from utils.definitions import BLANK_SAMPLES, CSV
 from classes.Data import *
 
+
 class Grid():
     """
     Class that holds genotype data from Grid file
     """
+
     def __init__(self, in_grid_file):
         self.get_data(in_grid_file)
-        
+
     def get_data(self, in_grid_file):
         self.name = in_grid_file
         smdata = defaultdict()
@@ -33,9 +35,9 @@ class Grid():
                 for i in range(1, len(entries)):
                     marker = markers[i-1]
                     if not marker in msdata:
-                        msdata[marker] = SM(marker)
+                        msdata[marker] = MS(marker)
                     if not sample in smdata:
-                        smdata[sample] = MS(marker)
+                        smdata[sample] = SM(sample)
                     call = Call(entries[i])
                     smdata[sample].put_data(marker, call)
                     msdata[marker].put_data(sample, call)

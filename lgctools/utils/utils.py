@@ -347,3 +347,14 @@ def secondsToText(secs):
         ("{0} second{1}".format(
             seconds, "s" if seconds != 1 else "") if seconds else "")
     return result
+
+
+def next_key(tmpList, current_key):
+    # temp = list(test_dict)
+    try:
+        res = tmpList[tmpList.index(current_key) + 1]
+        if res == 'N':
+            next_key(tmpList, res)
+    except (ValueError, IndexError):
+        res = None
+    return res

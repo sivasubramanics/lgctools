@@ -4,13 +4,15 @@ from utils.definitions import *
 from utils.utils import *
 from classes.Data import *
 
+
 class Hapmap():
     """
     Class that holds genotype data from hapmap file
     """
+
     def __init__(self, in_hmp_file):
         self.get_data(in_hmp_file)
-        
+
     def get_data(self, in_hmp_file):
         self.name = in_hmp_file
         smdata = defaultdict()
@@ -34,9 +36,9 @@ class Hapmap():
                     if sample in BLANK_SAMPLES:
                         continue
                     if not marker in msdata:
-                        msdata[marker] = SM(marker)
+                        msdata[marker] = MS(marker)
                     if not sample in smdata:
-                        smdata[sample] = MS(marker)
+                        smdata[sample] = SM(sample)
                     if len(entries[i]) == 1:
                         entries[i] = IUPAC[entries[i]]
                     if len(entries[i]) == 2:

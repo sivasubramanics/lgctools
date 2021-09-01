@@ -39,9 +39,9 @@ class LGC():
                     if sample in BLANK_SAMPLES:
                         continue
                     if not marker in msdata:
-                        msdata[marker] = SM(marker)
+                        msdata[marker] = MS(marker)
                     if not sample in smdata:
-                        smdata[sample] = MS(marker)
+                        smdata[sample] = SM(sample)
                     call = Call(gt_call)
                     call.put_xvalue(entries[4])
                     call.put_yvalue(entries[5])
