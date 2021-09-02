@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from plugins.consensus import *
+from plugins.pedver import *
 from plugins.bestmarkers import *
 from plugins.performance import *
 from plugins.differences import *
@@ -192,6 +193,10 @@ def main():
             exit(1)
         msdata, smdata = process_consensus(
             options.pedigree_file, smdata, msdata, markers, out_prefix)
+        pedver_summary = process_pedver(
+            options.pedigree_file, smdata, msdata, markers, out_prefix)
+        pedver_summary.to_csv(
+            out_prefix + '_F1_Summary.txt', sep=TAB, index=False)
 
     if options.task_find_differences:
         print_log(f"Finding polymorphic markers...")
@@ -199,7 +204,7 @@ def main():
         print_log(
             f"Writing polymorphic markers ({out_prefix + '_differences.txt'})...")
         differences.to_csv(out_prefix + "_differences.txt",
-                           sep="\t", index=False)
+                           sep=TAB, index=False)
 
     if options.task_checkperformance:
         print_log("Checking performance...")
