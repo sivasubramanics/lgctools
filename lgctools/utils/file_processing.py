@@ -21,7 +21,7 @@ def write_grid_file(outfile, smdata, markers, *args):
     for marker in markers:
         outfile_handle.write(CSV + marker)
     outfile_handle.write(NEWLINE)
-    for sample in smdata:
+    for sample in sorted(smdata):
         if sample in sample_dict:
             outfile_handle.write(sample_dict[sample])
         else:
@@ -200,8 +200,8 @@ def get_pedigree(in_pedigree_file):
                 pedigree_dict[entries[0]].set_parent_a(entries[2])
                 pedigree_dict[entries[0]].set_parent_b(entries[3])
     fh.close()
-    print_log(
-        f"Pedigree dictionary contains {len(pedigree_dict)} valid F-One genotypes with parents.")
+    # print_log(
+    #     f"Pedigree dictionary contains {len(pedigree_dict)} valid F-One genotypes with parents.")
     return pedigree_dict
 
 
@@ -242,7 +242,7 @@ def get_replicates(in_designation_file):
             if line_count == 1:
                 continue
             entries = line.split(TAB)
-            if len(entries) < 2:
+            if len(entries) != 2:
                 continue
             if entries[0] in samples:
                 continue

@@ -178,13 +178,20 @@ def main():
             make_wordcloud(ind_summary, out_prefix + '_BestMarkerCloud.png')
 
     if options.task_consensus:
-        csdata = defaultdict()
         if not options.designation_file:
             print_log(
                 f"ERROR: Designation file is needed to call consensus... Quiting...")
             exit(1)
-        replicates = get_replicates(options.designation_file)
-        csdata = get_consensus_dict(smdata, msdata, replicates)
+        msdata, smdata = process_consensus(
+            options.designation_file, smdata, msdata, markers, out_prefix)
+
+    if options.task_pedver:
+        if not options.pedigree_file:
+            print_log(
+                f"ERROR: Pedigree file is needed to call consensus and perform pedver... Quiting...")
+            exit(1)
+        msdata, smdata = process_consensus(
+            options.pedigree_file, smdata, msdata, markers, out_prefix)
 
     if options.task_find_differences:
         print_log(f"Finding polymorphic markers...")

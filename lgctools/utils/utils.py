@@ -38,6 +38,18 @@ def unique(in_list):
     return list(out_set)
 
 
+def intersect(list_a, list_b):
+    return list(set(list_a) & set(list_b))
+
+
+def remove_elements(in_list, rm_list):
+    out_list = []
+    for elem in in_list:
+        if not elem in rm_list:
+            out_list.append(elem)
+    return out_list
+
+
 def get_counts(in_list):
     """
     Returns dictionary of count for each element from a list
@@ -209,6 +221,13 @@ def fill_gaps_gtdata(smdata, msdata):
     return smdata, msdata
 
 
+def merge_gtdata(*args):
+    out_dict = defaultdict()
+    for i in range(0, len(args)):
+        out_dict.update(args[i])
+    return out_dict
+
+
 def get_dup_keys(in_dict, q_value):
     return [k for k, v in in_dict.items() if v == q_value]
 
@@ -358,3 +377,34 @@ def next_key(tmpList, current_key):
     except (ValueError, IndexError):
         res = None
     return res
+
+
+def get_list_from_dict(in_dict):
+    out_list = []
+    for key in in_dict:
+        if type(in_dict[key]) is list:
+            out_list += in_dict[key]
+        else:
+            out_list.append(in_dict[key])
+    return unique(out_list)
+
+
+def compare_two_samples(data_cons, data_rep):
+    markers = intersect(list(data_cons.data.keys()),
+                        list(data_rep.data.keys()))
+    match = 0
+    mismatch = 0
+    missing = 0
+    for marker in markers:
+        call_c = data_cons.data[marker].__str__()
+        call_r = data_rep.data[marker].__str__()
+        if call_c in MISSING_CALLS and call_r in MISSING_CALLS:
+            missing += 1
+        elif call_c == call_r:
+            match += 1
+        else:
+            if call_r in MISSING_CALLS:
+                missing += 1
+            else:
+                mismatch += 1
+    return [match, mismatch, missing, round(match/(match+mismatch)*100, 2)]
