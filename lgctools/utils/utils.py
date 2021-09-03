@@ -19,6 +19,19 @@ def is_homo(call):
         return False
 
 
+def is_hetero(call):
+    """
+    Check if the genotype call is heterozygous call eg: G:T
+    """
+    calls = call.split(':')
+    if call in MISSING_CALLS:
+        return False
+    elif calls[0] != calls[1]:
+        return True
+    else:
+        return False
+
+
 def is_polymorphic(call_a, call_b):
     """
     Check if calls are polymorphic
@@ -326,13 +339,13 @@ def get_opts():
     parser.add_argument("--consensus-cutOff", dest="cutoff_consensus", default=CUTOFF_CONSENSUS, type=float,
                         metavar="<INT>", help="Percentage propotion to be considered to call consensus")
     parser.add_argument("--max-missing-site", dest="cutoff_mx_missing_marker", default=MARKER_MISSING_MAXIMUM, type=float,
-                        metavar="<INT>", help="Percentage propotion to be considered to call consensus")
+                        metavar="<INT>", help="Percentage propotion to be considered for maximum missing per marker")
     parser.add_argument("--min-pic-site", dest="cutoff_mn_pic_marker", default=MARKER_PIC_MINIMUM, type=float,
-                        metavar="<FLOAT>", help="Percentage propotion to be considered to call consensus")
+                        metavar="<FLOAT>", help="Percentage propotion to be considered for PIC per marker")
     parser.add_argument("--min-maf-site", dest="cutoff_mn_maf_marker", default=MARKER_MAF_MINIMUM, type=float,
-                        metavar="<FLOAT>", help="Percentage propotion to be considered to call consensus")
+                        metavar="<FLOAT>", help="Percentage propotion to be considered for MAF per marker")
     parser.add_argument("--max-missing-sample", dest="cutoff_mx_missing_sample", default=SAMPLE_MISSING_MAXIMUM, type=float,
-                        metavar="<INT>", help="Percentage propotion to be considered to call consensus")
+                        metavar="<INT>", help="Percentage propotion to be considered for maximum missing per sample")
     # Parse commandline arguments
     return parser
 

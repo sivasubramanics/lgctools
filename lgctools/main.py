@@ -179,22 +179,18 @@ def main():
             make_wordcloud(ind_summary, out_prefix + '_BestMarkerCloud.png')
 
     if options.task_consensus:
-        if not options.designation_file:
-            print_log(
-                f"ERROR: Designation file is needed to call consensus... Quiting...")
-            exit(1)
+        print_log(f"Calling consensus calls for the parents/designations...")
         msdata, smdata = process_consensus(
-            options.designation_file, smdata, msdata, markers, out_prefix)
+            options, smdata, msdata, markers)
 
     if options.task_pedver:
-        if not options.pedigree_file:
-            print_log(
-                f"ERROR: Pedigree file is needed to call consensus and perform pedver... Quiting...")
-            exit(1)
+        print_log(f"Calling consensus calls for the parents/designations...")
         msdata, smdata = process_consensus(
-            options.pedigree_file, smdata, msdata, markers, out_prefix)
+            options, smdata, msdata, markers)
+        print_log(f"Processing F-One verification...")
         pedver_summary = process_pedver(
-            options.pedigree_file, smdata, msdata, markers, out_prefix)
+            options, smdata)
+        print_log(f"Writing PedVer summary...")
         pedver_summary.to_csv(
             out_prefix + '_F1_Summary.txt', sep=TAB, index=False)
 
@@ -224,16 +220,16 @@ def main():
         print(f"------------------------------------------------------------")
 
     if options.task_write_grid:
-        print_log(f"Writing Grid file ({out_prefix + '_out_grid.csv'})...")
-        write_grid_file(out_prefix + "_out_grid.csv", smdata, markers)
+        print_log(f"Writing Grid file ({out_prefix + '_grid.csv'})...")
+        write_grid_file(out_prefix + "_grid.csv", smdata, markers)
 
     if options.task_write_fjk:
-        print_log(f"Writing Flapjack file ({out_prefix + '_out_FJ.data'})...")
-        write_flapjack_file(out_prefix + "_out_FJ.data", smdata, markers)
+        print_log(f"Writing Flapjack file ({out_prefix + '_FJ.data'})...")
+        write_flapjack_file(out_prefix + "_FJ.data", smdata, markers)
 
     if options.task_write_hapmap:
-        print_log(f"Writing Hapmap file ({out_prefix + '_out.hmp.txt'})...")
-        write_hapmap_file(out_prefix + "_out.hmp.txt", smdata, markers)
+        print_log(f"Writing Hapmap file ({out_prefix + '.hmp.txt'})...")
+        write_hapmap_file(out_prefix + ".hmp.txt", smdata, markers)
 
     if options.task_make_plots:
         print_log("Writing SNP plots...")

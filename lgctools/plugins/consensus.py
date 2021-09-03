@@ -5,7 +5,7 @@ from collections import defaultdict
 import pandas as pd
 
 
-def get_consensus(calls):
+def get_consensus(calls, cutoff):
     calls = list(map(str, calls))
     counts = get_counts(calls)
     counts = sort_dict(counts, True)
@@ -16,10 +16,10 @@ def get_consensus(calls):
     for base in counts:
         if base in MISSING_CALLS:
             continue
-        if counts[base] / (len(calls) - miss_count) * 100 > CONSENSUSCUTOFF:
+        if counts[base] / (len(calls) - miss_count) * 100 > cutoff:
             return base
         else:
-            if counts[base] / (len(calls) - miss_count) * 100 == CONSENSUSCUTOFF:
+            if counts[base] / (len(calls) - miss_count) * 100 == cutoff:
                 nextbase = next_key(list(counts.keys()), base)
                 if counts[base] == counts[nextbase]:
                     return 'N:N'
@@ -29,7 +29,7 @@ def get_consensus(calls):
                 return 'N:N'
 
 
-def get_consensus_dict(smdata, msdata, reps_dict):
+def get_consensus_dict(smdata, msdata, reps_dict, cutoff):
     cons_smdata = defaultdict()
     cons_msdata = defaultdict()
     for cons_name in reps_dict:
@@ -37,7 +37,7 @@ def get_consensus_dict(smdata, msdata, reps_dict):
         for marker in msdata:
             calls = msdata[marker].get_data(reps)
             if len(calls) >= 1:
-                call = get_consensus(calls)
+                call = get_consensus(calls, cutoff)
                 if not marker in cons_msdata:
                     cons_msdata[marker] = MS(marker)
                 if not cons_name in cons_smdata:
@@ -79,14 +79,22 @@ def get_consensus_report(consensus_summary, replicates):
     return consensus_report
 
 
-def process_consensus(designation_file, smdata, msdata, markers, out_prefix):
+def process_consensus(options, smdata, msdata, markers):
+    if options.designation_file:
+        designation_file = options.designation_file
+    elif options.pedigree_file:
+        designation_file = options.pedigree_file
+    else:
+        print_log(
+            f"ERROR: Designation file/Pedigree file is needed to call consensus... Quiting...")
+        exit(1)
+    out_prefix = options.out_prefix
     # Dictionary with deignation and its replicates
     replicates = get_replicates(designation_file)
     # List of all replicates
     replicates_list = get_list_from_dict(replicates)
-    print_log(f"Calling consensus calls for the parents/designations...")
     cons_smdata, cons_msdata = get_consensus_dict(
-        smdata, msdata, replicates)
+        smdata, msdata, replicates, options.cutoff_consensus)
     rep_msdata = subset_gtdata(
         msdata, markers, replicates_list, 'markerfast')
     rep_smdata = subset_gtdata(
