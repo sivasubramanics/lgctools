@@ -19,14 +19,12 @@ import sys
 import time
 import warnings
 import numpy as np
-
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 
 def main():
 
     start_time = time.time()
-
     parser = get_opts()
     options = parser.parse_args()
 
@@ -38,11 +36,6 @@ def main():
     markers = defaultdict(Markermetadata)
     out_prefix = options.out_prefix
     smdata, msdata = defaultdict(), defaultdict()
-
-    if options.pedigree_file:
-        print_log(
-            f"Processing complete for pedigree file ({options.pedigree_file})...")
-        pedigree_dict = get_pedigree(options.pedigree_file)
 
     if options.lgc_file:
         print_log(f"Reading input LGC genotype data ({options.lgc_file})...")
