@@ -1,7 +1,7 @@
 
 import sys
 from collections import defaultdict
-from utils.definitions import *
+from ..utils.definitions import *
 
 
 class Option():

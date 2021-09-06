@@ -11,12 +11,13 @@ setup(
     version='1.0.0',
     author='S.Sivasubramani',
     author_email='c.s.sivasubramani@gmail.com',
-    url='https://github.com/siavsubramanics/lgctools',
+    url='https://github.com/sivasubramanics/lgctools',
     description='Processes the LGC files for tasks involved in purity check.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     license='MIT',
     packages=find_packages(),
+    package_data={'lgctools': ['data/*.txt']},
     entry_points={
             'console_scripts': [
                 'lgctools = lgctools.main:main'
@@ -27,7 +28,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ),
-    keywords='geeksforgeeks gfg article python package vibhu4agarwal',
+    keywords='lgctools pedigreeverification pedver cssivasubramani dmas breeding qc',
     install_requires=requirements,
     zip_safe=False
 )

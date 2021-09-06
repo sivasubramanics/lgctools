@@ -1,3 +1,16 @@
 {
-  "cSpell.words": ["fone", "lgctools", "msdata", "nargs", "smdata"]
+  "cSpell.words": [
+    "chrom",
+    "fone",
+    "HMPHEAD",
+    "HMPNA",
+    "IUPAC",
+    "KASP",
+    "lgctools",
+    "msdata",
+    "nargs",
+    "reheader",
+    "smdata",
+    "SNPINFO"
+  ]
 }
