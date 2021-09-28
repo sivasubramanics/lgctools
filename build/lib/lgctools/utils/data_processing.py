@@ -1,8 +1,11 @@
 from collections import defaultdict
+from ..utils.utils import print_log
 from ..classes.Data import MS, SM, Call, Markermetadata
 
 
 def subset_gtdata(in_data, markers, samples, data_type):
+    miss_marker = []
+    miss_sample = []
     if data_type == 'samplefast':
         out_data = defaultdict()
         for sample in in_data:
@@ -13,6 +16,9 @@ def subset_gtdata(in_data, markers, samples, data_type):
                 if not marker in markers:
                     continue
                 out_data[sample].put_data(marker, in_data[sample].data[marker])
+        for sample in samples:
+            if not sample in out_data:
+                miss_sample.append(sample)
     elif data_type == 'markerfast':
         out_data = defaultdict()
         for marker in in_data:
@@ -23,10 +29,17 @@ def subset_gtdata(in_data, markers, samples, data_type):
                 if not sample in samples:
                     continue
                 out_data[marker].put_data(sample, in_data[marker].data[sample])
+        for marker in markers:
+            if not marker in out_data:
+                miss_marker.append(marker)
     else:
         print(
             f"Error: {data_type} is unknown. Should be 'samplefast' or 'markerfast'..")
         exit(1)
+    if miss_marker:
+        print_log(f"missing markers {miss_marker}")
+    if miss_sample:
+        print_log(f"missing samples {miss_sample}")
     return out_data
 
 
