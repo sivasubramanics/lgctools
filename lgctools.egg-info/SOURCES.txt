@@ -20,6 +20,7 @@ lgctools/plugins/__init__.py
 lgctools/plugins/bestmarkers.py
 lgctools/plugins/consensus.py
 lgctools/plugins/differences.py
+lgctools/plugins/fwdbreed.py
 lgctools/plugins/pedver.py
 lgctools/plugins/performance.py
 lgctools/plugins/plots.py

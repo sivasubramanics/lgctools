@@ -6,7 +6,7 @@ from lgctools.classes.Grid import Grid
 from lgctools.classes.Hapmap import Hapmap
 from lgctools.utils.definitions import TAB
 from lgctools.utils.file_processing import get_marker_info, get_markers, get_samplemap, make_markers, write_grid_file, write_flapjack_file, write_hapmap_file
-from lgctools.utils.data_processing import fill_gaps_gtdata, subset_gtdata, filter_samples, filter_markers
+from lgctools.utils.data_processing import fill_gaps_gtdata, merge_gtdata, subset_gtdata, filter_samples, filter_markers
 from lgctools.utils.utils import get_opts, print_log, secondsToText, get_list_from_file
 from lgctools.plugins.rename import rename_data
 from lgctools.plugins.differences import find_differences
@@ -39,6 +39,8 @@ def main():
     markers = defaultdict(Markermetadata)
     out_prefix = options.out_prefix
     smdata, msdata = defaultdict(), defaultdict()
+    marker_summary = ""
+    sample_summary = ""
 
     if options.lgc_file:
         print_log(f"Reading input LGC genotype data ({options.lgc_file})...")
@@ -46,6 +48,17 @@ def main():
         msdata = gt_data.msdata
         smdata = gt_data.smdata
         markers = get_markers(options.lgc_file, markers, marker_info)
+        samples = list(smdata.keys())
+
+    if options.lgc_files:
+        for in_file in options.lgc_files:
+            print_log(
+                f"Reading input LGC genotype data ({in_file})...")
+            gt_data = LGC(in_file)
+            msdata = merge_gtdata(msdata, gt_data.msdata)
+            smdata = merge_gtdata(smdata, gt_data.smdata)
+            markers = merge_gtdata(markers, get_markers(
+                in_file, markers, marker_info))
         samples = list(smdata.keys())
 
     if options.grid_file:
@@ -64,6 +77,8 @@ def main():
         smdata = gt_data.smdata
         marker = make_markers(msdata, markers, marker_info)
         samples = list(smdata.keys())
+
+    print_log("Data processing compeleted...")
 
     if not msdata and not smdata:
         print_log(
@@ -118,9 +133,9 @@ def main():
                               sep="\t", index=False)
 
     if options.task_filter:
-        if not marker_summary:
+        if marker_summary.empty:
             marker_summary = get_marker_summary(msdata)
-        if not sample_summary:
+        if not sample_summary.empty:
             sample_summary = get_sample_summary(smdata)
 
         print_log(f"Filtering data...")
@@ -159,9 +174,9 @@ def main():
         sample_list_b = []
 
     if options.task_bestmarkers:
-        if not marker_summary:
+        if marker_summary.empty:
             marker_summary = get_marker_summary(msdata)
-        if not sample_summary:
+        if not sample_summary.empty:
             sample_summary = get_sample_summary(smdata)
         print_log(f"Finding best markers...")
         all_summary, ind_summary = get_best_markers(

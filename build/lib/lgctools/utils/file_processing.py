@@ -125,7 +125,7 @@ def get_markers(in_lgc_file, markers, marker_info_dict):
     flag_snp = 0
     ms_for_plot = defaultdict()
     markers_for_plot = defaultdict()
-    with open(in_lgc_file) as fh:
+    with open(in_lgc_file, 'r', encoding="latin-1") as fh:
         noSamples = 0
         noBlankSamples = 0
         list_samples = []

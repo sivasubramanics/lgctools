@@ -17,7 +17,7 @@ class LGC():
         count_data_points = 0
         smdata = defaultdict()
         msdata = defaultdict()
-        with open(in_lgc_file, 'r') as fh:
+        with open(in_lgc_file, 'r', encoding="latin-1") as fh:
             for line in fh:
                 line = line.strip()
                 entries = line.split(CSV)
