@@ -71,11 +71,44 @@ def fill_gaps_gtdata(smdata, msdata):
     return smdata, msdata
 
 
-def merge_gtdata(*args):
+def merge_dictionary(*args):
     out_dict = defaultdict()
     for i in range(0, len(args)):
         out_dict.update(args[i])
     return out_dict
+
+
+def merge_gtdata(data_one, data_two, data_type):
+    if data_type == "marker-fast":
+        msdata = defaultdict()
+        for marker in data_one:
+            if not marker in msdata:
+                msdata[marker] = MS(marker)
+            for sample in data_one[marker].data:
+                msdata[marker].put_data(sample, data_one[marker].data[sample])
+        for marker in data_two:
+            if not marker in msdata:
+                msdata[marker] = MS(marker)
+            for sample in data_two[marker].data:
+                msdata[marker].put_data(sample, data_two[marker].data[sample])
+        return msdata
+    elif data_type == "sample-fast":
+        smdata = defaultdict()
+        for sample in data_one:
+            if not sample in smdata:
+                smdata[sample] = SM(sample)
+            for marker in data_one[sample].data:
+                smdata[sample].put_data(marker, data_one[sample].data[marker])
+        for sample in data_two:
+            if not sample in smdata:
+                smdata[sample] = SM(sample)
+            for marker in data_two[sample].data:
+                smdata[sample].put_data(marker, data_two[sample].data[marker])
+        return smdata
+    else:
+        print(
+            f"Error: {data_type} is unknown. Should be 'sample-fast' or 'marker-fast'..")
+        exit(1)
 
 
 def filter_markers(markers, flt_marker_summary):

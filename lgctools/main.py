@@ -6,7 +6,7 @@ from lgctools.classes.Grid import Grid
 from lgctools.classes.Hapmap import Hapmap
 from lgctools.utils.definitions import TAB
 from lgctools.utils.file_processing import get_marker_info, get_markers, get_samplemap, make_markers, write_grid_file, write_flapjack_file, write_hapmap_file
-from lgctools.utils.data_processing import fill_gaps_gtdata, merge_gtdata, subset_gtdata, filter_samples, filter_markers
+from lgctools.utils.data_processing import fill_gaps_gtdata, merge_gtdata, subset_gtdata, filter_samples, filter_markers, merge_dictionary
 from lgctools.utils.utils import get_opts, print_log, secondsToText, get_list_from_file
 from lgctools.plugins.rename import rename_data
 from lgctools.plugins.differences import find_differences
@@ -55,9 +55,9 @@ def main():
             print_log(
                 f"Reading input LGC genotype data ({in_file})...")
             gt_data = LGC(in_file)
-            msdata = merge_gtdata(msdata, gt_data.msdata)
-            smdata = merge_gtdata(smdata, gt_data.smdata)
-            markers = merge_gtdata(markers, get_markers(
+            msdata = merge_gtdata(msdata, gt_data.msdata, 'marker-fast')
+            smdata = merge_gtdata(smdata, gt_data.smdata, 'sample-fast')
+            markers = merge_dictionary(markers, get_markers(
                 in_file, markers, marker_info))
         samples = list(smdata.keys())
 
