@@ -1,0 +1,51 @@
+from ..utils.definitions import CSV, BLANK_SAMPLES
+from .Data import MS, SM, Call
+from collections import defaultdict
+
+
+class LGC():
+    """
+    Class that holds genotype data from LGC file
+    """
+
+    def __init__(self, in_lgc_file):
+        # self.name = name
+        self.get_data(in_lgc_file)
+
+    def get_data(self, in_lgc_file):
+        flag_data = 0
+        count_data_points = 0
+        smdata = defaultdict()
+        msdata = defaultdict()
+        with open(in_lgc_file, 'r', encoding="latin-1") as fh:
+            for line in fh:
+                line = line.strip()
+                entries = line.split(CSV)
+                if entries[0] == "Order number":
+                    self.name = entries[1]
+                if line == "":
+                    flag_data = 0
+                    continue
+                if entries[0] == 'Data':
+                    flag_data = 1
+                    continue
+                if flag_data == 1:
+                    count_data_points += 1
+                    if count_data_points == 1:
+                        continue
+                    marker = entries[6]
+                    sample = entries[7]
+                    gt_call = entries[3]
+                    if sample in BLANK_SAMPLES:
+                        continue
+                    if not marker in msdata:
+                        msdata[marker] = MS(marker)
+                    if not sample in smdata:
+                        smdata[sample] = SM(sample)
+                    call = Call(gt_call)
+                    call.put_xvalue(entries[4])
+                    call.put_yvalue(entries[5])
+                    smdata[sample].put_data(marker, call)
+                    msdata[marker].put_data(sample, call)
+        self.smdata = smdata
+        self.msdata = msdata

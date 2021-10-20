@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: lgctools
+Version: 1.0.0
+Summary: Processes the LGC files for tasks involved in purity check.
+Home-page: https://github.com/sivasubramanics/lgctools
+Author: S.Sivasubramani
+Author-email: c.s.sivasubramani@gmail.com
+License: MIT
+Keywords: lgctools pedigreeverification pedver cssivasubramani dmas breeding qc
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+
+Python tool to process and perform various     LGC related tasks, mainly in focus to breeding applications.
+
