@@ -17,7 +17,7 @@ From discussion: Siva, Victor
 `                [--lgc-files <FILES> [<FILES> ...]] [--grid-file <FILE>] [--grid-files <FILES>]`  
 `                [--hmp-file <FILE>] [--samplemap-file <FILE>] [--ped-file <FILE>]`  
 `                [--designation-file <FILE>] [--meta-data <FILE>] [--marker-list <FILE>]`  
-`                [--sample-list <FILE>] [--male-parents-list <FILE>] [--female-parents-list <FILE>]`
+`                [--sample-list <FILE>] [--male-parents-list <FILE>] [--female-parents-list <FILE>]`  
 `                [--qtl-file <FILE>] [--out <STR>] [--f1het-cutOff <INT>]`  
 `                [--consensus-cutOff <INT>] [--max-missing-site <INT>] [--min-pic-site <FLOAT>]`  
 `                [--min-maf-site <FLOAT>] [--max-missing-sample <INT>]`    
