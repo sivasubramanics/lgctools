@@ -2,19 +2,14 @@
 From discussion: Siva, Victor
 
 ## Installation (Siva will verify prerequisites for install)
-1. Clone the repository.
+1. Clone the repository.  
+`$ git clone https://github.com/sivasubramanics/lgctools`  
+`$ cd lgctools`  
+`$ python3 setup.py build`  
 
-`$ git clone https://github.com/sivasubramanics/lgctools`
+2. Invoke lgctools:  
+`$ lgctools`  
 
-`$ cd lgctools`
-
-`$ python3 setup.py build`
-
-2. Invoke lgctools:
-
-`$ lgctools`
-
-3. Display lgctools options:
-
-`$ lgctools --help` 
+3. Display lgctools options:  
+`$ lgctools --help`  
 
