@@ -1,1 +1,1 @@
-# H1 lgctools Cookbook
+# lgctools Cookbook
