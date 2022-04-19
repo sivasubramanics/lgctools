@@ -12,7 +12,7 @@ From discussion: Siva, Victor
 4. Display lgctools options:  
 `$ lgctools --help`  
 `usage: lgctools [-h] [--summary] [--rename] [--out-grid] [--out-flapjack] [--out-hapmap]`   
-`                [--differences] [--performance] [--make-plots] [--bestmarkers] [--markercloud]`  
+`                [--differences] [--performance] [--make-plots] [--bestmarkers] [--markercloud]`  
 `                [--filter] [--pedver] [--consensus] [--fwdbreed] [--lgc-file <FILE>]`  
 `                [--lgc-files <FILES> [<FILES> ...]] [--grid-file <FILE>] [--grid-files <FILES>]`  
 `                [--hmp-file <FILE>] [--samplemap-file <FILE>] [--ped-file <FILE>]`  
@@ -20,7 +20,7 @@ From discussion: Siva, Victor
 `                [--sample-list <FILE>] [--male-parents-list <FILE>] [--female-parents-list <FILE>]`  
 `                [--qtl-file <FILE>] [--out <STR>] [--f1het-cutOff <INT>]`  
 `                [--consensus-cutOff <INT>] [--max-missing-site <INT>] [--min-pic-site <FLOAT>]`  
-`                [--min-maf-site <FLOAT>] [--max-missing-sample <INT>]`  <br />
+`                [--min-maf-site <FLOAT>] [--max-missing-sample <INT>]`  
 `QC pipeline: Processes the LGC file for tasks involved in purity check`   
 `optional arguments:`  
 `  -h, --help            show this help message and exit`  
