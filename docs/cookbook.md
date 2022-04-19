@@ -1,7 +1,9 @@
 # lgctools Cookbook
+
 From discussion: Siva, Victor
 
 ## Installation (Siva will verify prerequisites for install)
+
 1. Clone the repository:  
 `$ git clone https://github.com/sivasubramanics/lgctools`  
 `$ cd lgctools`  
@@ -70,3 +72,11 @@ From discussion: Siva, Victor
 `  --max-missing-sample <INT>`  
 `                        Percentage propotion to be considered for maximum missing per sample`  
 
+## Get summary information of an LGC file.
+
+1. __Input:__  LGC file in csv format
+2. __Command:__  `$ lgctools --summary --lgc-file <filename>`
+3. __Ouput(s):__  `tsv files: out_marker_summary.txt, out_sample_summary.txt`
+
+__Note:__  By default, the script automatically creates files with filenames prefixed with `out_`. You can specify a custom prefix to identify the output. The command now looks like and will create filenames with `my_output` prefix:  
+`$ lgctools --summary --lgc-file <filename> --out my_output`  
