@@ -17,10 +17,8 @@ From discussion: Siva, Victor
 `                [--ped-file <FILE>] [--designation-file <FILE>] [--meta-data <FILE>] [--marker-list <FILE>] [--sample-list <FILE>]`  
 `                [--male-parents-list <FILE>] [--female-parents-list <FILE>] [--qtl-file <FILE>] [--out <STR>] [--f1het-cutOff <INT>]`  
 `                [--consensus-cutOff <INT>] [--max-missing-site <INT>] [--min-pic-site <FLOAT>] [--min-maf-site <FLOAT>]`  
-`                [--max-missing-sample <INT>]`  
-  
+`                [--max-missing-sample <INT>]`    
 `QC pipeline: Processes the LGC file for tasks involved in purity check`  
-  
 `optional arguments:`  
 `  -h, --help            show this help message and exit`  
 `  --summary             Generate sample and marker summary for the data from genotype file`  
