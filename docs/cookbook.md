@@ -11,13 +11,16 @@ From discussion: Siva, Victor
 `$ lgctools`  
 4. Display lgctools options:  
 `$ lgctools --help`  
-`usage: lgctools [-h] [--summary] [--rename] [--out-grid] [--out-flapjack] [--out-hapmap] [--differences] [--performance] [--make-plots]`  
-`                [--bestmarkers] [--markercloud] [--filter] [--pedver] [--consensus] [--fwdbreed] [--lgc-file <FILE>]`  
-`                [--lgc-files <FILES> [<FILES> ...]] [--grid-file <FILE>] [--grid-files <FILES>] [--hmp-file <FILE>] [--samplemap-file <FILE>]`  
-`                [--ped-file <FILE>] [--designation-file <FILE>] [--meta-data <FILE>] [--marker-list <FILE>] [--sample-list <FILE>]`  
-`                [--male-parents-list <FILE>] [--female-parents-list <FILE>] [--qtl-file <FILE>] [--out <STR>] [--f1het-cutOff <INT>]`  
-`                [--consensus-cutOff <INT>] [--max-missing-site <INT>] [--min-pic-site <FLOAT>] [--min-maf-site <FLOAT>]`  
-`                [--max-missing-sample <INT>]`    
+`usage: lgctools [-h] [--summary] [--rename] [--out-grid] [--out-flapjack] [--out-hapmap]`   
+`                [--differences] [--performance] [--make-plots] [--bestmarkers] [--markercloud]`  
+`                [--filter] [--pedver] [--consensus] [--fwdbreed] [--lgc-file <FILE>]`  
+`                [--lgc-files <FILES> [<FILES> ...]] [--grid-file <FILE>] [--grid-files <FILES>]`  
+`                [--hmp-file <FILE>] [--samplemap-file <FILE>] [--ped-file <FILE>]`  
+`                [--designation-file <FILE>] [--meta-data <FILE>] [--marker-list <FILE>]`  
+`                [--sample-list <FILE>] [--male-parents-list <FILE>] [--female-parents-list <FILE>]`
+`                [--qtl-file <FILE>] [--out <STR>] [--f1het-cutOff <INT>]`  
+`                [--consensus-cutOff <INT>] [--max-missing-site <INT>] [--min-pic-site <FLOAT>]`  
+`                [--min-maf-site <FLOAT>] [--max-missing-sample <INT>]`    
 `QC pipeline: Processes the LGC file for tasks involved in purity check`  
 `optional arguments:`  
 `  -h, --help            show this help message and exit`  
