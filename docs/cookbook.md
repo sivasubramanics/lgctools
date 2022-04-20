@@ -122,4 +122,65 @@ __Note:__ You can also convert an LGC file into grid and flapjack formats by rep
   
 __Note:__ You can specify a hapmap or grid file by replacing `--lgc-file` with corresponding input type (`--hapmap-file` or `--grid-file`). Output is a table of markers for all pairwise genotypes combinations.  
 
-__Discussion of output (Siva). Show screenshot of output and discuss the result.__  
+__Discussion of output (Siva). Show screenshot of output and discuss the result.__ 
+
+## Get performance of markers out of all pairwise genotypes combinations.
+
+1. __Input:__ LGC or hapmap or grid files  
+2. __Command:__ `$ lgctools --lgc-file <lgc file> --performance`  
+3. __Output:__ Displayed in the terminal:   
+`[Wed Apr  6 17:37:05 2022] - Reading input LGC genotype data (Genotyping-008.105-02.csv)...`  
+`[Wed Apr  6 17:37:05 2022] - Data processing compeleted...`  
+`[Wed Apr  6 17:37:05 2022] - Input data : 1496 samples x 14 markers`  
+`[Wed Apr  6 17:37:05 2022] - Checking performance...`  
+`------------------------------------------------------------`  
+`[Wed Apr  6 17:37:16 2022] - Marker Performance on the Data`  
+`------------------------------------------------------------`  
+`------------------------------------------------------------`  
+`Total combinations                        : 1118260`  
+`Combinations with ZERO polymorphic markers: 166587 (14.9 %)`  
+`Combinations with >= 1 polymorphic markers: 951673 (85.1 %)`  
+`Combinations with >= 2 polymorphic markers: 797860 (71.35 %)`  
+`------------------------------------------------------------`  
+`[Wed Apr  6 17:37:16 2022] - Total Time taken for the process 11.22 seconds`  
+  
+__Discussion: Highlighted is the performance of the markers. (Siva: could add the explanation.)__
+  
+__Note:__ You can pipe the output to a file using the “>” and a filename:  
+`$ lgctools --lgc-file <lgc file> --performance > mrkr_performance.txt`   
+
+## Create visualization (dot plot) of allele (homo vs hetero) for each markers.
+
+1. __Input:__ LGC file  
+2. __Command:__ `$ lgctools –-lgc-file <lgc file> –-make-plots –-out plot`  
+3. __Output:__ x number of png files for x genotypes.  
+  
+__Discuss output here.__  
+
+## Identify a cost effective set of markers for a given population. (to do: add command and input file. (Siva))
+
+1. __Input:__ Parent A; Parent B; a set of individuals  
+2. __Command:__  
+3. __Output:__  
+  
+__Discuss output__
+
+## I want to verify the pedigree. (to do: add command and input file. (Siva))
+
+1. __Input:__ pedigree, grid, or hapmap file.  
+2. __Command:__ `$ lgctools --grid-file grid.csv --ped-file pedigree.txt --pedver`  
+3. __Output:__  
+  
+__Discuss output__  
+
+## I want to generate consensus. (to do: add command and input file. (Siva))
+
+1. __Input:__  
+2. __Command:__  
+3. __Output:__  
+  
+## Forward breeding (to do: add command and input file. (Siva))
+
+1. __Input:__ Parent A (string); Parent B (string); QTL information  
+2. __Command:__  
+3. __Output:__  
