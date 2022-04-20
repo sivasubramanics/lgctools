@@ -79,4 +79,47 @@ From discussion: Siva, Victor
 3. __Ouput(s):__  `tsv files: out_marker_summary.txt, out_sample_summary.txt`
 
 __Note:__  By default, the script automatically creates files with filenames prefixed with `out_`. You can specify a custom prefix to identify the output. The command now looks like and will create filenames with `my_output` prefix:  
-`$ lgctools --summary --lgc-file <filename> --out my_output`  
+`$ lgctools --summary --lgc-file <filename> --out my_output` 
+
+## Rename sample names in genotype file
+
+1. __Input:__ LGC file; Sample map file (see note below)  
+2. __Command:__ `$ lgctools –-rename --samplemap-file <sample map file> –-lgc-file <lgc file> –-out my_out`  
+3. __Output:__ grid file  
+  
+__Note:__ Sample map file is a two-column file where the first column is the LGC sample ID and the second column is the BMS sample name (unique ID).  
+  
+`LGC_SampleID    BMS_SampleName`  
+`8T3QSA1xhsFY0   ICCV 181114:9`  
+`8T3QSY1HUsiNz   ICCV 181114:10`  
+`8T3QSC3xbel7z   ICCV 181114:11`  
+`8T3QSNYuhxw1N   ICCV 181114:12`  
+`8T3QSTpBTNk5n   ICCV 181114:13`  
+`8T3QSABgN751a   ICCV 181114:14`  
+`8T3QSgixO4FwT   ICCV 181114:15`  
+`8T3QSk0EeAAzQ   ICCV 181114:16`  
+`8T3QS0euXBPTF   ICCV 181117:9`  
+`8T3QS83sNaLkE   ICCV 181117:10`  
+`8T3QSZ6MthiVs   ICCV 181117:11`  
+`8T3QSRzHV8meN   ICCV 181117:12`  
+`8T3QS0ZrSVhZB   ICCV 181117:13`  
+`8T3QS7MH6iQvz   ICCV 181117:14`  
+`8T3QSHcS8awvu   ICCV 181117:15`  
+
+## Convert an lgc file to hapmap (to do, create example for all compatible file formats)
+
+1. __Input:__ LGC file  
+2. __Command:__ `$ lgctools –-lgc-file <lgc file> –-out my_out –-out-hapmap`  
+3. __Output:__ `my_out.hmp.txt`  
+  
+__Note:__ You can also convert an LGC file into grid and flapjack formats by replacing `--out-hapmap` with `--out-flapjack` or `--out-grid`. Similarly, you can convert a grid file into hapmap by replacing `--lgc-file` with `--grid-file` and corresponding output file: `--out-hapmap`.  
+
+## Get all possible polymorphic markers in all pairwise genotypic combinations. (to do, include --prefix, create examples for other file formats hapmap, grid).
+
+1. __Input:__ LGC or hapmap or grid file  
+2. __Command:__ `$ lgctools –-lgc-file <lgc-file> –-differences –-out diff`  
+3. __Output:__ `diff.txt`  
+  
+__Note:__ You can specify a hapmap or grid file by replacing `--lgc-file` with corresponding input type (`--hapmap-file` or `--grid-file`). Output is a table of markers for all pairwise genotypes combinations.  
+
+__Discussion of output (Siva). Show screenshot of output and discuss the result.__  
