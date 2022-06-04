@@ -2,14 +2,11 @@ import copy
 
 
 def rename_data(smdata, msdata, samplemap_dict):
-    # out_msdata = msdata.copy()
-    # out_smdata = smdata.copy()
     out_msdata = copy.deepcopy(msdata)
     out_smdata = copy.deepcopy(smdata)
 
     for marker in msdata:
         for sample in msdata[marker].data:
-            print(f"{sample}\t{marker}")
             if sample in samplemap_dict:
                 out_msdata[marker].data[samplemap_dict[sample]
                                         ] = out_msdata[marker].data.pop(sample)
